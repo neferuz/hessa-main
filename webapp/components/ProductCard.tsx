@@ -19,6 +19,7 @@ interface Product {
     sale_price: number;
     category?: Category;
     images?: string[];
+    is_active: boolean;
 }
 
 export default function ProductCard({ activeCategory }: { activeCategory: string }) {
@@ -44,9 +45,11 @@ export default function ProductCard({ activeCategory }: { activeCategory: string
         fetchProducts();
     }, []);
 
-    const filteredProducts = activeCategory === "Все товары"
-        ? products
-        : products.filter(p => p.category?.name === activeCategory);
+    const filteredProducts = products.filter(p => {
+        const matchesCategory = activeCategory === "Все товары" || p.category?.name === activeCategory;
+        const isActive = p.is_active !== false;
+        return matchesCategory && isActive;
+    });
 
     const formatPrice = (price: number) => {
         return new Intl.NumberFormat('ru-RU').format(price);
@@ -65,9 +68,9 @@ export default function ProductCard({ activeCategory }: { activeCategory: string
     return (
         <div className="px-5 mb-32">
             {/* Section Header */}
-            <div className="flex items-center justify-between mb-5">
-                <h3 className="text-[18px] font-bold text-[#1C1C1E] tracking-tight">Популярное</h3>
-                <button className="text-[11px] text-blue-600 font-bold hover:opacity-70 transition-opacity">Все</button>
+            <div className="flex items-center justify-between mb-4 relative z-10">
+                <h3 className="text-[18px] font-black text-[#1C1C1E] tracking-tight">Популярное</h3>
+                <button className="text-[11px] text-[#00a8a8] font-bold uppercase tracking-widest active:opacity-70 transition-opacity">Все</button>
             </div>
 
             <motion.div layout className="grid grid-cols-2 gap-3">
@@ -83,18 +86,18 @@ export default function ProductCard({ activeCategory }: { activeCategory: string
                                 exit={{ opacity: 0, scale: 0.9 }}
                                 transition={{ duration: 0.4 }}
                                 onClick={() => router.push(`/product/${product.id}`)}
-                                className="bg-white rounded-[28px] overflow-hidden flex flex-col relative shadow-sm shadow-black/[0.015] border border-gray-100/50 group"
+                                className="bg-white rounded-[20px] overflow-hidden flex flex-col relative shadow-[0_2px_8px_rgba(0,0,0,0.02)] border border-[#F0F0F0] active:scale-[0.98] transition-all duration-200 group"
                             >
                                 {/* Top Image Section - Full Width */}
-                                <div className="w-full aspect-square bg-[#F8F9FB] relative flex items-center justify-center">
+                                <div className="w-full aspect-square bg-[#F8F9FB] relative flex items-center justify-center p-2">
                                     {/* Overlays */}
-                                    <div className="absolute top-2.5 left-2.5 z-10">
-                                        <div className="bg-white px-2.5 py-1 rounded-full shadow-sm border border-gray-50 flex items-center justify-center">
-                                            <span className="text-[9px] font-black text-gray-900 uppercase tracking-tight">Coming Soon</span>
+                                    <div className="absolute top-2 left-2 z-10">
+                                        <div className="bg-white px-2 py-0.5 rounded-md shadow-sm border border-gray-100 flex items-center justify-center">
+                                            <span className="text-[8px] font-bold text-[#1C1C1E] uppercase tracking-wider">Coming Soon</span>
                                         </div>
                                     </div>
-                                    <button className="absolute top-2.5 right-2.5 z-10 w-8 h-8 rounded-full bg-white shadow-sm border border-gray-50 flex items-center justify-center text-gray-400 hover:text-red-500 transition-all active:scale-90">
-                                        <Heart size={14} />
+                                    <button className="absolute top-2 right-2 z-10 w-7 h-7 rounded-full bg-white shadow-sm border border-gray-100 flex items-center justify-center text-gray-400 active:scale-90 transition-all">
+                                        <Heart size={13} strokeWidth={2} />
                                     </button>
 
                                     <Image
@@ -107,29 +110,32 @@ export default function ProductCard({ activeCategory }: { activeCategory: string
                                 </div>
 
                                 {/* Content Section - Compact */}
-                                <div className="p-3.5 flex flex-col pt-3">
-                                    <div className="mb-2">
+                                <div className="p-3 flex flex-col pt-2.5 pb-3">
+                                    <div className="mb-1.5">
                                         <h4 className="text-[13px] font-bold text-[#1C1C1E] leading-tight line-clamp-1 mb-0.5">
                                             {product.name}
                                         </h4>
-                                        <p className="text-[10px] text-gray-400 font-extrabold uppercase tracking-widest">Medicine</p>
+                                        <p className="text-[9px] text-gray-400 font-bold uppercase tracking-widest">Витамины</p>
                                     </div>
 
                                     {/* Bottom - Price & Button */}
                                     <div className="flex items-center justify-between mt-auto">
-                                        <span className="text-[15px] font-black text-[#1C1C1E]">
-                                            {formatPrice(product.sale_price)} <span className="text-[11px] text-gray-400 font-bold">сум</span>
-                                        </span>
+                                        <div className="flex items-baseline gap-1">
+                                            <span className="text-[14px] font-black text-[#1C1C1E] tracking-tight leading-none">
+                                                {formatPrice(product.sale_price)}
+                                            </span>
+                                            <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">сум</span>
+                                        </div>
 
                                         <motion.button
                                             whileTap={{ scale: 0.9 }}
                                             onClick={(e) => handleAddToCart(e, product)}
                                             className={clsx(
-                                                "w-9 h-9 rounded-full flex items-center justify-center transition-all duration-300 shadow-md",
-                                                inCart ? "bg-emerald-500 text-white shadow-emerald-500/10" : "bg-blue-600 text-white shadow-blue-600/20"
+                                                "w-8 h-8 rounded-lg flex items-center justify-center transition-all bg-[#F4F4F5] text-[#1C1C1E] active:bg-gray-200",
+                                                inCart && "bg-[#00a8a8] text-white"
                                             )}
                                         >
-                                            {inCart ? <Check size={16} /> : <ArrowUpRight size={18} />}
+                                            {inCart ? <Check size={15} strokeWidth={2.5} /> : <Plus size={16} strokeWidth={2} />}
                                         </motion.button>
                                     </div>
                                 </div>

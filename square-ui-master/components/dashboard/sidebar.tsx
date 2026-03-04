@@ -196,6 +196,14 @@ export function DashboardSidebar({
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
+                <SidebarMenuButton asChild isActive={pathname === "/promo-codes"} className="h-8 text-sm text-muted-foreground font-medium">
+                  <Link href="/promo-codes">
+                    <Megaphone className="size-4" />
+                    <span>Промокоды</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
                 <SidebarMenuButton asChild isActive={pathname === "/plans"} className="h-8 text-sm text-muted-foreground font-medium">
                   <Link href="/plans">
                     <Sparkles className="size-4" />

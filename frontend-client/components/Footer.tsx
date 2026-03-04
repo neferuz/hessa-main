@@ -89,8 +89,8 @@ export default function Footer() {
     return (
         <footer className={styles.footer}>
             <div className={styles.container}>
-                {/* 1. SECTION: MAIN NAVIGATION */}
-                <div className={styles.mainGrid}>
+                {/* 1. SECTION: BRAND & CONTACT */}
+                <div className={styles.topSection}>
                     <div className={styles.brandInfo}>
                         <Link href="/" className={styles.logo}>HESSA</Link>
                         <p className={styles.brandSlogan}>
@@ -98,70 +98,34 @@ export default function Footer() {
                         </p>
                     </div>
 
-                    <div>
-                        <h4 className={styles.colTitle}>{getTranslated('col_1_title') || (lang === 'RU' ? "Коллекции" : lang === 'UZ' ? "To'plamlar" : "Collections")}</h4>
-                        <div className={styles.linkList}>
-                            {(footer?.col_1_links || []).map((link: any, idx: number) => (
-                                <Link key={idx} href={link.url} className={styles.navLink}>
-                                    {getTranslatedLabel(link)}
-                                </Link>
-                            ))}
+                    <div className={styles.contactRow}>
+                        <div className={styles.contactGroup}>
+                            <span className={styles.contactLabel}>{t.contactLabel}</span>
+                            <a href={`tel:${footer?.phone?.replace(/\D/g, '')}`} className={styles.contactValue}>
+                                {footer?.phone || "+998 (90) 123-4567"}
+                            </a>
                         </div>
-                    </div>
-
-                    <div>
-                        <h4 className={styles.colTitle}>{getTranslated('col_2_title') || (lang === 'RU' ? "Сервис" : lang === 'UZ' ? "Xizmat" : "Service")}</h4>
-                        <div className={styles.linkList}>
-                            {(footer?.col_2_links || []).map((link: any, idx: number) => (
-                                <Link key={idx} href={link.url} className={styles.navLink}>
-                                    {getTranslatedLabel(link)}
-                                </Link>
-                            ))}
+                        <div className={styles.contactGroup}>
+                            <span className={styles.contactLabel}>{t.writeLabel}</span>
+                            <a href={`mailto:${footer?.email}`} className={styles.contactValue}>
+                                {footer?.email || "hello@hessa.uz"}
+                            </a>
                         </div>
-                    </div>
-
-                    <div>
-                        <h4 className={styles.colTitle}>{getTranslated('col_3_title') || (lang === 'RU' ? "Бренд" : lang === 'UZ' ? "Brend" : "Brand")}</h4>
-                        <div className={styles.linkList}>
-                            {(footer?.col_3_links || []).map((link: any, idx: number) => (
-                                <Link key={idx} href={link.url} className={styles.navLink}>
-                                    {getTranslatedLabel(link)}
-                                </Link>
-                            ))}
+                        <div className={styles.contactGroup}>
+                            <span className={styles.contactLabel}>{t.socialLabel}</span>
+                            <div className={styles.socialIcons}>
+                                <a href={footer?.instagram || "#"} target="_blank" rel="noopener noreferrer" className={styles.socialCircle} aria-label="Instagram">
+                                    <Instagram size={20} />
+                                </a>
+                                <a href={footer?.telegram || "#"} target="_blank" rel="noopener noreferrer" className={styles.socialCircle} aria-label="Telegram">
+                                    <Send size={20} />
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                {/* 2. SECTION: CONTACT & SOCIALS */}
-                <div className={styles.contactRow}>
-                    <div className={styles.contactGroup}>
-                        <span className={styles.contactLabel}>{t.contactLabel}</span>
-                        <a href={`tel:${footer?.phone?.replace(/\D/g, '')}`} className={styles.contactValue}>
-                            {footer?.phone || "+998 (90) 123-4567"}
-                        </a>
-                    </div>
-
-                    <div className={styles.contactGroup}>
-                        <span className={styles.contactLabel}>{t.writeLabel}</span>
-                        <a href={`mailto:${footer?.email}`} className={styles.contactValue}>
-                            {footer?.email || "hello@hessa.uz"}
-                        </a>
-                    </div>
-
-                    <div className={styles.contactGroup}>
-                        <span className={styles.contactLabel}>{t.socialLabel}</span>
-                        <div className={styles.socialIcons}>
-                            <a href={footer?.instagram || "#"} target="_blank" rel="noopener noreferrer" className={styles.socialCircle} aria-label="Instagram">
-                                <Instagram size={20} />
-                            </a>
-                            <a href={footer?.telegram || "#"} target="_blank" rel="noopener noreferrer" className={styles.socialCircle} aria-label="Telegram">
-                                <Send size={20} />
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                {/* 3. SECTION: COMPANY DETAILS */}
+                {/* 2. SECTION: COMPANY DETAILS */}
                 <div className={styles.companyDetails}>
                     <div className={styles.detailsGrid}>
                         <div className={styles.detailItem}>
@@ -180,7 +144,7 @@ export default function Footer() {
                             <span className={styles.detailLabel}>{t.account}</span>
                             <span className={styles.detailValue}>20208000207277774001</span>
                         </div>
-                        <div className={styles.detailItem} style={{ gridColumn: 'span 2' }}>
+                        <div className={styles.detailItemFull}>
                             <span className={styles.detailLabel}>{t.address}</span>
                             <span className={styles.detailValue}>
                                 {t.addressValue}
@@ -189,7 +153,7 @@ export default function Footer() {
                     </div>
                 </div>
 
-                {/* 4. SECTION: UTILITY BAR */}
+                {/* 3. SECTION: UTILITY BAR */}
                 <div className={styles.bottomBar}>
                     <div className={styles.legalLinks}>
                         <span>{footer?.copyright_text || `© ${new Date().getFullYear()} HESSA Inc.`}</span>
@@ -200,9 +164,9 @@ export default function Footer() {
                         ))}
                     </div>
 
-                    <div className={styles.contactGroup} style={{ alignItems: 'flex-end' }}>
+                    <div className={styles.locationGroup}>
                         <span className={styles.contactLabel}>{t.locationLabel}</span>
-                        <span className={styles.contactValue} style={{ fontSize: '1rem' }}>
+                        <span className={styles.contactValue} style={{ fontSize: '1rem', fontWeight: 400 }}>
                             {getTranslated('location') || (lang === 'RU' ? "Ташкент, Узбекистан" : lang === 'UZ' ? "Toshkent, O'zbekiston" : "Tashkent, Uzbekistan")}
                         </span>
                     </div>

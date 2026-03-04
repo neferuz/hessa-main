@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import { ChevronLeft, ChevronRight, Check, X, Calendar as CalendarIcon, Info, Bell, Clock } from "lucide-react";
+import { ChevronLeft, ChevronRight, Check, X, Calendar as CalendarIcon, Info, Bell, Clock, Zap, Star } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import BottomNav from "@/components/BottomNav";
 import clsx from "clsx";
@@ -47,9 +47,9 @@ export default function CalendarPage() {
         const monthStr = `${year}-${month}`;
 
         // Month total
-        const monthTotal = Object.keys(takenDays).filter(d => d.startsWith(monthStr) && takenDays[d]).length;
+        const monthTotal = Object.keys(takenDays).filter(d => d.startsWith(`${year}-${month}`) && takenDays[d]).length;
 
-        // Progress towards the 30-day goal (100% = 30 days)
+        // Progress towards the 30-day goal
         const percentage = Math.round((monthTotal / 30) * 100);
         const missed = dayOfMonth - monthTotal;
 
@@ -99,7 +99,6 @@ export default function CalendarPage() {
 
     const weekDays = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"];
 
-    // Adjust first day to start with Monday (1) instead of Sunday (0)
     let firstDay = firstDayOfMonth(currentDate.getFullYear(), currentDate.getMonth());
     firstDay = firstDay === 0 ? 6 : firstDay - 1;
 
@@ -118,151 +117,138 @@ export default function CalendarPage() {
     };
 
     return (
-        <main className="min-h-screen pb-24 bg-[#FAFAFB] relative max-w-md mx-auto overflow-x-hidden pt-8 px-6 font-sans text-[#1C1C1E]">
-            {/* Header */}
-            <header className="flex items-center justify-between mb-8">
-                <div>
-                    <h1 className="text-[22px] font-black tracking-tighter text-[#1C1C1E] uppercase">Трекер</h1>
-                    <p className="text-gray-400 text-[12px] font-bold uppercase tracking-wider">Прием витаминов</p>
-                </div>
-                <div className="w-11 h-11 rounded-2xl bg-white flex items-center justify-center border border-gray-100">
-                    <CalendarIcon className="text-blue-600" size={20} />
-                </div>
-            </header>
+        <main className="min-h-screen pb-20 bg-[#FAFAFB] relative max-w-md mx-auto overflow-x-hidden pt-6 px-5 font-inter text-[#1C1C1E]">
+            {/* Decorative Mesh Gradient */}
+            <div className="absolute top-[-5%] right-[-5%] w-[350px] h-[350px] bg-[#00a8a8]/10 blur-[120px] rounded-full z-0 pointer-events-none" />
 
-            {/* Compliance Progress Section - Flat Premium */}
-            <div className="bg-[#1C1C1E] rounded-[32px] p-6 text-white mb-6 relative overflow-hidden">
-                <div className="relative z-10 flex items-center justify-between mb-4">
+            <div className="relative z-10">
+                {/* Header Area - Ultra Compact */}
+                <div className="flex items-center justify-between mb-5">
                     <div>
-                        <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-500 mb-1 block">Дисциплина</span>
-                        <h2 className="text-3xl font-black leading-none">{stats.percentage}%</h2>
-                    </div>
-                    <div className="text-right">
-                        <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-500 mb-1 block">Пропуски</span>
-                        <h2 className="text-xl font-black leading-none text-red-500/90">{stats.missed} <span className="text-[10px] font-bold text-gray-600">дн.</span></h2>
-                    </div>
-                </div>
-                {/* Progress Bar */}
-                <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden relative">
-                    <motion.div
-                        initial={{ width: 0 }}
-                        animate={{ width: `${stats.percentage}%` }}
-                        transition={{ duration: 0.8, ease: "circOut" }}
-                        className="absolute h-full left-0 top-0 bg-blue-600"
-                    />
-                </div>
-                <p className="text-[10px] text-gray-500 mt-4 font-bold uppercase tracking-widest text-center opacity-70">
-                    {stats.percentage >= 80 ? "Идеальный ритм" : "Нужно больше фокуса"}
-                </p>
-            </div>
-
-            {/* Stats Cards - Integrated */}
-            <div className="grid grid-cols-2 gap-3 mb-6">
-                <div className="bg-white p-4 rounded-3xl border border-gray-100">
-                    <span className="text-gray-400 text-[9px] font-black uppercase tracking-widest block mb-1.5">Серия</span>
-                    <div className="flex items-baseline gap-1.5">
-                        <span className="text-xl font-black text-[#1C1C1E]">{stats.streak}</span>
-                        <span className="text-gray-400 text-[10px] font-bold uppercase">дней</span>
-                    </div>
-                </div>
-                <div className="bg-white p-4 rounded-3xl border border-gray-100">
-                    <span className="text-gray-400 text-[9px] font-black uppercase tracking-widest block mb-1.5">Месяц</span>
-                    <div className="flex items-baseline gap-1.5">
-                        <span className="text-xl font-black text-[#1C1C1E]">{stats.monthTotal}</span>
-                        <span className="text-gray-400 text-[10px] font-bold uppercase">раз</span>
-                    </div>
-                </div>
-            </div>
-
-            {/* Calendar Container - Clean Flat */}
-            <div className="bg-white rounded-[32px] p-6 border border-gray-100 mb-6">
-                <div className="flex items-center justify-between mb-6">
-                    <button onClick={prevMonth} className="w-8 h-8 flex items-center justify-center hover:bg-gray-50 rounded-full transition-colors text-gray-400">
-                        <ChevronLeft size={18} />
-                    </button>
-                    <h2 className="text-[15px] font-black text-[#1C1C1E] uppercase tracking-wider">
-                        {monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}
-                    </h2>
-                    <button onClick={nextMonth} className="w-8 h-8 flex items-center justify-center hover:bg-gray-50 rounded-full transition-colors text-gray-400">
-                        <ChevronRight size={18} />
-                    </button>
-                </div>
-
-                <div className="grid grid-cols-7 gap-1 mb-4">
-                    {weekDays.map(day => (
-                        <div key={day} className="text-center text-[9px] font-black text-gray-300 uppercase tracking-widest py-1">
-                            {day}
-                        </div>
-                    ))}
-                </div>
-
-                <div className="grid grid-cols-7 gap-2">
-                    {days.map((day, idx) => (
-                        <div key={idx} className="aspect-square flex items-center justify-center relative">
-                            {day ? (
-                                <motion.button
-                                    whileTap={{ scale: 0.95 }}
-                                    onClick={() => toggleDay(day)}
-                                    className={clsx(
-                                        "w-full h-full rounded-xl text-[13px] font-bold transition-all flex items-center justify-center relative",
-                                        isTaken(day)
-                                            ? "bg-blue-600 text-white"
-                                            : isToday(day)
-                                                ? "bg-blue-50 text-blue-600 border border-blue-100"
-                                                : "text-[#1C1C1E] hover:bg-gray-50"
-                                    )}
-                                >
-                                    {day}
-                                    {isTaken(day) && (
-                                        <div className="absolute top-1 right-1">
-                                            <div className="w-1 h-1 rounded-full bg-white/50" />
-                                        </div>
-                                    )}
-                                </motion.button>
-                            ) : null}
-                        </div>
-                    ))}
-                </div>
-            </div>
-
-            {/* Reminder & Info - Compact */}
-            <div className="flex flex-col gap-3">
-                <div className="bg-white rounded-[28px] p-4 border border-gray-100 flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                        <div className={clsx(
-                            "w-9 h-9 rounded-xl flex items-center justify-center",
-                            reminderEnabled ? "bg-blue-50 text-blue-600" : "bg-gray-50 text-gray-400"
-                        )}>
-                            <Bell size={18} />
-                        </div>
-                        <div>
-                            <h4 className="font-bold text-[#1C1C1E] text-[13px]">Напоминания</h4>
-                            <p className="text-[10px] text-gray-400 font-bold uppercase tracking-tight">{reminderTime}</p>
+                        <h1 className="text-[20px] font-black tracking-tight text-[#1C1C1E] drop-shadow-sm">Трекер</h1>
+                        <div className="flex items-center gap-1.5 mt-1">
+                            <div className="w-1.5 h-1.5 rounded-full bg-[#00a8a8]" />
+                            <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest leading-none">Hessa Daily</span>
                         </div>
                     </div>
-                    <button
+                    <motion.button
+                        whileTap={{ scale: 0.95 }}
                         onClick={() => setReminderEnabled(!reminderEnabled)}
                         className={clsx(
-                            "w-11 h-6 rounded-full relative transition-colors duration-300",
-                            reminderEnabled ? "bg-blue-600" : "bg-gray-100"
+                            "w-[36px] h-[36px] flex items-center justify-center rounded-full transition-all border border-gray-200 bg-transparent active:scale-95 hover:bg-gray-50",
+                            reminderEnabled ? "text-blue-600" : "text-[#1C1C1E]"
                         )}
                     >
-                        <motion.div
-                            animate={{ x: reminderEnabled ? 22 : 2 }}
-                            className="absolute top-1 left-0 w-4 h-4 bg-white rounded-full"
-                        />
-                    </button>
+                        <Bell size={17} strokeWidth={1.5} />
+                    </motion.button>
                 </div>
 
-                <div className="bg-blue-600 rounded-[28px] p-5 text-white flex items-start gap-4">
-                    <div className="bg-white/10 p-2 rounded-xl">
-                        <Info size={18} />
+                {/* Quick Stats Grid - Flat & Compact */}
+                <div className="grid grid-cols-3 gap-2 mb-6">
+                    <div className="bg-white rounded-[16px] p-3 border border-gray-100 flex flex-col items-center justify-center text-center">
+                        <span className="text-[18px] font-black text-[#1C1C1E]">{stats.streak}</span>
+                        <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest mt-0.5">Серия</span>
                     </div>
-                    <div>
-                        <h4 className="font-black text-[11px] uppercase tracking-widest mb-1 opacity-70">Совет</h4>
-                        <p className="text-[13px] font-medium leading-snug opacity-90">
-                            Пейте витамины во время завтрака для лучшего усвоения в течение дня.
-                        </p>
+
+                    <div className="bg-[#1C1C1E] rounded-[16px] p-3 flex flex-col items-center justify-center text-center">
+                        <span className="text-[18px] font-black text-white">{stats.percentage}%</span>
+                        <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest mt-0.5">Цель</span>
+                    </div>
+
+                    <div className="bg-white rounded-[16px] p-3 border border-gray-100 flex flex-col items-center justify-center text-center">
+                        <span className="text-[18px] font-black text-red-500">{stats.missed}</span>
+                        <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest mt-0.5">Пропуск</span>
+                    </div>
+                </div>
+
+                {/* Calendar Container - Flat Premium */}
+                <div className="bg-white rounded-[24px] p-5 border border-gray-100 mb-5">
+                    <div className="flex items-center justify-between mb-5 px-1">
+                        <h2 className="text-[13px] font-bold text-[#1C1C1E] uppercase tracking-wider">
+                            {monthNames[currentDate.getMonth()]}
+                        </h2>
+                        <div className="flex items-center gap-0.5">
+                            <button onClick={prevMonth} className="w-8 h-8 flex items-center justify-center hover:bg-gray-50 rounded-lg transition-colors text-gray-400 active:scale-90">
+                                <ChevronLeft size={16} />
+                            </button>
+                            <button onClick={nextMonth} className="w-8 h-8 flex items-center justify-center hover:bg-gray-50 rounded-lg transition-colors text-gray-400 active:scale-90">
+                                <ChevronRight size={16} />
+                            </button>
+                        </div>
+                    </div>
+
+                    <div className="grid grid-cols-7 gap-1 mb-3">
+                        {weekDays.map(day => (
+                            <div key={day} className="text-center text-[9px] font-bold text-gray-300 uppercase tracking-widest">
+                                {day}
+                            </div>
+                        ))}
+                    </div>
+
+                    <div className="grid grid-cols-7 gap-1.5">
+                        {days.map((day, idx) => (
+                            <div key={idx} className="aspect-square flex items-center justify-center">
+                                {day ? (
+                                    <motion.button
+                                        whileTap={{ scale: 0.9 }}
+                                        onClick={() => toggleDay(day)}
+                                        className={clsx(
+                                            "w-full h-full rounded-full text-[13px] font-bold transition-all flex items-center justify-center relative duration-200",
+                                            isTaken(day)
+                                                ? "bg-blue-600 text-white"
+                                                : isToday(day)
+                                                    ? "bg-gray-100 text-[#1C1C1E] font-black"
+                                                    : "bg-transparent text-[#1C1C1E] hover:bg-gray-50"
+                                        )}
+                                    >
+                                        {day}
+                                        {isTaken(day) && (
+                                            <div className="absolute top-1.5 right-1.5 w-1 h-1 rounded-full bg-white/60" />
+                                        )}
+                                    </motion.button>
+                                ) : null}
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                {/* Reminder & Tip Combine - Ultra Compact */}
+                <div className="grid grid-cols-1 gap-2">
+                    <div className="bg-white rounded-[16px] p-4 border border-gray-100 flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                            <div className={clsx(
+                                "w-8 h-8 rounded-lg flex items-center justify-center transition-colors",
+                                reminderEnabled ? "bg-blue-600/10 text-blue-600" : "bg-gray-50 text-gray-400"
+                            )}>
+                                <Clock size={16} strokeWidth={2} />
+                            </div>
+                            <span className="font-bold text-[#1C1C1E] text-[13px]">Напоминание {reminderTime}</span>
+                        </div>
+                        <button
+                            onClick={() => setReminderEnabled(!reminderEnabled)}
+                            className={clsx(
+                                "w-10 h-5 rounded-full relative transition-colors duration-300 p-0.5",
+                                reminderEnabled ? "bg-blue-600" : "bg-gray-200"
+                            )}
+                        >
+                            <motion.div
+                                layout
+                                animate={{ x: reminderEnabled ? 20 : 0 }}
+                                className="w-4 h-4 bg-white rounded-full shadow-sm"
+                            />
+                        </button>
+                    </div>
+
+                    <div className="bg-[#1C1C1E] rounded-[16px] p-4 text-white flex items-start gap-3">
+                        <div className="bg-white/10 p-2 rounded-lg shrink-0">
+                            <Star size={16} fill="currentColor" className="text-white" />
+                        </div>
+                        <div className="flex flex-col">
+                            <span className="text-[10px] uppercase tracking-wider text-gray-400 font-bold mb-0.5">Совет дня</span>
+                            <p className="text-[12px] font-medium leading-tight text-white/90">
+                                Витамины лучше усваиваются утром вместе со сбалансированным завтраком.
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>

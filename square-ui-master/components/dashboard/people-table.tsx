@@ -28,6 +28,7 @@ import {
   Phone,
   Tag,
   MapPin,
+  Link as LinkIcon,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -66,7 +67,7 @@ const statusColors = {
   away: "text-yellow-600",
 };
 
-export const columns: ColumnDef<Person>[] = [
+export const columns: ColumnDef<any>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -90,7 +91,7 @@ export const columns: ColumnDef<Person>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "name",
+    accessorKey: "username",
     header: ({ column }) => {
       return (
         <Button
@@ -98,44 +99,47 @@ export const columns: ColumnDef<Person>[] = [
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           className="h-8 px-2"
         >
-          Name
+          Имя
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
     cell: ({ row }) => {
       const person = row.original;
+      const name = person.username || person.name;
+      const avatar = person.avatar || `https://api.dicebear.com/9.x/glass/svg?seed=${name}`;
       return (
         <div className="flex items-center gap-2">
-          <Avatar className="size-5">
-            <AvatarImage src={person.avatar} alt={person.name} />
+          <Avatar className="size-5 text-[10px]">
+            <AvatarImage src={avatar} alt={name} />
             <AvatarFallback>
-              {person.name.charAt(0).toUpperCase()}
+              {name?.charAt(0).toUpperCase()}
             </AvatarFallback>
           </Avatar>
-          <span className="text-sm text-foreground">{person.name}</span>
+          <span className="text-sm text-foreground">{name}</span>
         </div>
       );
     },
   },
   {
-    accessorKey: "jobTitle",
+    accessorKey: "role",
     header: () => (
       <div className="flex items-center gap-2">
         <Briefcase className="size-4 text-muted-foreground" />
-        <span>Job Title</span>
+        <span>Роль</span>
       </div>
     ),
-    cell: ({ row }) => (
-      <div className="text-sm text-foreground">{row.getValue("jobTitle")}</div>
-    ),
+    cell: ({ row }) => {
+      const role = row.original.role || row.original.jobTitle || "Клиент";
+      return <div className="text-sm text-foreground">{role}</div>;
+    },
   },
   {
     accessorKey: "status",
     header: () => (
       <div className="flex items-center gap-2">
         <CircleDashed className="size-4 text-muted-foreground" />
-        <span>Status</span>
+        <span>Статус</span>
       </div>
     ),
     filterFn: (row, id, value) => {
@@ -143,12 +147,16 @@ export const columns: ColumnDef<Person>[] = [
       return value.includes(status);
     },
     cell: ({ row }) => {
-      const status = row.getValue("status") as Person["status"];
-      const StatusIcon = statusIcons[status];
+      const status = (row.getValue("status") as Person["status"]) || "offline";
+      const StatusIcon = statusIcons[status] || CircleDashed;
       return (
         <div className="flex items-center gap-1.5">
-          <StatusIcon className={cn("size-3.5", statusColors[status])} />
-          <span className="text-sm capitalize text-foreground">{status}</span>
+          <StatusIcon className={cn("size-3.5", statusColors[status] || "text-muted-foreground")} />
+          <span className="text-sm capitalize text-foreground">
+            {status === 'active' ? 'Активен' :
+              status === 'offline' ? 'Оффлайн' :
+                status === 'away' ? 'Отошел' : status}
+          </span>
         </div>
       );
     },
@@ -179,7 +187,7 @@ export const columns: ColumnDef<Person>[] = [
     header: () => (
       <div className="flex items-center gap-2">
         <Phone className="size-4 text-muted-foreground" />
-        <span>Phone</span>
+        <span>Телефон</span>
       </div>
     ),
     cell: ({ row }) => (
@@ -191,14 +199,14 @@ export const columns: ColumnDef<Person>[] = [
     header: () => (
       <div className="flex items-center gap-2">
         <Tag className="size-4 text-muted-foreground" />
-        <span>Tags</span>
+        <span>Теги</span>
       </div>
     ),
     cell: ({ row }) => {
       const tags = row.getValue("tags") as string[];
       return (
         <div className="flex flex-wrap gap-1">
-          {tags.map((tag) => (
+          {tags?.map((tag) => (
             <span
               key={tag}
               className="rounded-md border border-border bg-muted px-2 py-0.5 text-xs text-foreground"
@@ -211,11 +219,37 @@ export const columns: ColumnDef<Person>[] = [
     },
   },
   {
+    accessorKey: "telegram_id",
+    header: () => (
+      <div className="flex items-center gap-2">
+        <LinkIcon className="size-4 text-muted-foreground" />
+        <span>Telegram</span>
+      </div>
+    ),
+    cell: ({ row }) => (
+      <div className="text-sm text-foreground">{row.getValue("telegram_id") || "-"}</div>
+    ),
+  },
+  {
+    accessorKey: "created_at",
+    header: () => (
+      <div className="flex items-center gap-2">
+        <CalendarIcon className="size-4 text-muted-foreground" />
+        <span>Дата рег.</span>
+      </div>
+    ),
+    cell: ({ row }) => (
+      <div className="text-sm text-muted-foreground whitespace-nowrap">
+        {row.getValue("created_at")}
+      </div>
+    ),
+  },
+  {
     accessorKey: "address",
     header: () => (
       <div className="flex items-center gap-2">
         <MapPin className="size-4 text-muted-foreground" />
-        <span>Address</span>
+        <span>Адрес</span>
       </div>
     ),
     cell: ({ row }) => (
@@ -237,15 +271,15 @@ export const columns: ColumnDef<Person>[] = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            <DropdownMenuLabel>Действия</DropdownMenuLabel>
             <DropdownMenuItem
               onClick={() => navigator.clipboard.writeText(person.id)}
             >
-              Copy person ID
+              Копировать ID
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>View person</DropdownMenuItem>
-            <DropdownMenuItem>View details</DropdownMenuItem>
+            <DropdownMenuItem>Просмотр</DropdownMenuItem>
+            <DropdownMenuItem>Детали</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );
@@ -334,7 +368,7 @@ export function PeopleTable() {
                 className="h-7 gap-2 shrink-0"
               >
                 <Filter className="size-3.5" />
-                <span className="hidden sm:inline">Filter</span>
+                <span className="hidden sm:inline">Фильтр</span>
                 {columnFilters.length > 0 && (
                   <span className="rounded-full bg-primary px-1.5 py-0.5 text-xs text-primary-foreground">
                     {columnFilters.length}
@@ -343,7 +377,7 @@ export function PeopleTable() {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="start" className="w-48">
-              <DropdownMenuLabel>Filter by Status</DropdownMenuLabel>
+              <DropdownMenuLabel>Фильтр по статусу</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuCheckboxItem
                 checked={isStatusFiltered("active")}
@@ -351,7 +385,7 @@ export function PeopleTable() {
               >
                 <div className="flex items-center gap-2">
                   <CheckCircle2 className="size-3.5 text-green-600" />
-                  Active
+                  Активен
                 </div>
               </DropdownMenuCheckboxItem>
               <DropdownMenuCheckboxItem
@@ -360,7 +394,7 @@ export function PeopleTable() {
               >
                 <div className="flex items-center gap-2">
                   <CircleDashed className="size-3.5 text-muted-foreground" />
-                  Offline
+                  Оффлайн
                 </div>
               </DropdownMenuCheckboxItem>
               <DropdownMenuCheckboxItem
@@ -369,7 +403,7 @@ export function PeopleTable() {
               >
                 <div className="flex items-center gap-2">
                   <CalendarIcon className="size-3.5 text-yellow-600" />
-                  Away
+                  Отошел
                 </div>
               </DropdownMenuCheckboxItem>
               {columnFilters.length > 0 && (
@@ -379,7 +413,7 @@ export function PeopleTable() {
                     onClick={() => setColumnFilters([])}
                     className="text-destructive"
                   >
-                    Clear filters
+                    Сбросить фильтры
                   </DropdownMenuItem>
                 </>
               )}
@@ -392,7 +426,7 @@ export function PeopleTable() {
                 size="sm"
                 className="h-7 hidden md:flex shrink-0"
               >
-                Columns <ChevronDown className="ml-2 h-4 w-4" />
+                Колонки <ChevronDown className="ml-2 h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
@@ -422,7 +456,7 @@ export function PeopleTable() {
           className="h-7 gap-2 hidden lg:flex shrink-0"
         >
           <Upload className="size-3.5" />
-          Import People
+          Импорт
         </Button>
       </div>
 
@@ -437,9 +471,9 @@ export function PeopleTable() {
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
                     </TableHead>
                   );
                 })}
@@ -469,7 +503,7 @@ export function PeopleTable() {
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No results.
+                  Нет результатов.
                 </TableCell>
               </TableRow>
             )}
@@ -479,8 +513,8 @@ export function PeopleTable() {
 
       <div className="flex items-center justify-end space-x-2 border-t border-border p-4">
         <div className="text-muted-foreground flex-1 text-sm">
-          {table.getFilteredSelectedRowModel().rows.length} of{" "}
-          {table.getFilteredRowModel().rows.length} row(s) selected.
+          {table.getFilteredSelectedRowModel().rows.length} из{" "}
+          {table.getFilteredRowModel().rows.length} строк выбрано.
         </div>
         <div className="space-x-2">
           <Button
@@ -489,7 +523,7 @@ export function PeopleTable() {
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
           >
-            Previous
+            Назад
           </Button>
           <Button
             variant="outline"
@@ -497,7 +531,7 @@ export function PeopleTable() {
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
           >
-            Next
+            Вперед
           </Button>
         </div>
       </div>

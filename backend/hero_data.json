@@ -2,7 +2,7 @@
     "slides": [
         {
             "id": 1,
-            "headline": "HEALTHCARE. REAL RESULTS2",
+            "headline": "\u041f\u0435\u0440\u0432\u044b\u0439 \u0441\u0435\u0440\u0432\u0438\u0441 \u043f\u0435\u0440\u0441\u043e\u043d\u0430\u043b\u0438\u0437\u0438\u0440\u043e\u0432\u0430\u043d\u043d\u044b\u0445 \u0432\u0438\u0442\u0430\u043c\u0438\u043d\u043e\u0432 \u0432 \u0423\u0437\u0431\u0435\u043a\u0438\u0441\u0442\u0430\u043d\u0435 ",
             "headline_uz": "\u0442\u0435\u0441\u0442",
             "headline_en": "",
             "descriptionLeft": "Take the step towards a healthier, more vibrant life \u2013 shop now and fuel your body with the best!",
@@ -11,7 +11,7 @@
             "descriptionRight": "Our products are carefully formulated with science-backed ingredients, free from artificial additives.",
             "descriptionRight_uz": "\u0442\u0435\u0441\u0442",
             "descriptionRight_en": "",
-            "buttonText": "\u041d\u0430\u0447\u0430\u0442\u044c",
+            "buttonText": "\u041e\u0444\u043e\u0440\u043c\u0438\u0442\u044c \u0437\u0430\u043a\u0430\u0437",
             "buttonText_uz": "Sotib olish",
             "buttonText_en": "Shop Now",
             "tags": [
@@ -31,7 +31,7 @@
                     "y": 30.0
                 }
             ],
-            "image": "http://localhost:8000/static/uploads/b9666724-8e2b-4ebd-a07a-2a8605ea072b.png",
+            "image": "/banners-img/banner-1.png",
             "color": "#FFFFFF"
         },
         {
@@ -65,7 +65,7 @@
                     "y": 20.0
                 }
             ],
-            "image": "http://localhost:8000/static/uploads/46f01ee7-7a17-4c28-bbe3-8e8a7780c5ab.jpeg",
+            "image": "/banners-img/hf_20260301_105955_41ebe898-144c-449d-b101-ad895c42dd99.png",
             "color": "#FFFFFF"
         },
         {
@@ -99,7 +99,41 @@
                     "y": 25.0
                 }
             ],
-            "image": "http://localhost:8000/static/uploads/3ee8bc24-74e8-4a4b-bb3b-1a4a3408e764.png",
+            "image": "/banners-img/hf_20260301_105959_8d366f68-9d28-4d51-8981-e9a46b76ffc5 (1).jpeg",
+            "color": "#FFFFFF"
+        },
+        {
+            "id": 4,
+            "headline": "FOCUS. MENTAL CLARITY",
+            "headline_uz": "",
+            "headline_en": "",
+            "descriptionLeft": "Unlock your full cognitive potential with our advanced nootropic blend.",
+            "descriptionLeft_uz": "",
+            "descriptionLeft_en": "",
+            "descriptionRight": "Clinically proven ingredients to enhance memory, focus, and mental processing speed.",
+            "descriptionRight_uz": "",
+            "descriptionRight_en": "",
+            "buttonText": "\u041a\u0443\u043f\u0438\u0442\u044c \u0441\u0435\u0439\u0447\u0430\u0441",
+            "buttonText_uz": "Sotib olish",
+            "buttonText_en": "Shop Now",
+            "tags": [
+                {
+                    "label": "No Caffeine",
+                    "x": -45.0,
+                    "y": 65.0
+                },
+                {
+                    "label": "100% Focus",
+                    "x": 45.0,
+                    "y": 65.0
+                },
+                {
+                    "label": "Vit B12+B6",
+                    "x": 45.0,
+                    "y": 25.0
+                }
+            ],
+            "image": "/banners-img/hf_20260301_111404_2d0d3107-d7d5-4f55-bf85-12150f49ef9d.jpeg",
             "color": "#FFFFFF"
         }
     ]

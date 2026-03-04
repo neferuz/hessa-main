@@ -29,6 +29,7 @@ class Order(Base):
     total_amount: Mapped[float] = mapped_column(Float, default=0.0)
     duration: Mapped[int] = mapped_column(Integer, default=1)  # months
     ai_analysis: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    quiz_answers: Mapped[Optional[dict]] = mapped_column(JSON, nullable=True)
     
     # Timestamps
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())

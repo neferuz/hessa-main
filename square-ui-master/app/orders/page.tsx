@@ -24,6 +24,7 @@ interface Order {
     duration?: number;
     user_id?: number;
     ai_analysis?: string;
+    quiz_answers?: Record<string, any>;
     user?: {
         id: number;
         username: string;
@@ -234,16 +235,32 @@ export default function OrdersPage() {
                                     </div>
                                 </div>
 
-                                {/* AI Analysis */}
+                                {/* AI Analysis & Quiz Answers */}
                                 {selectedOrder.ai_analysis && (
-                                    <div className="space-y-3 p-5 bg-primary/5 rounded-2xl border border-primary/10">
-                                        <div className="flex items-center gap-2 text-primary">
-                                            <Sparkles size={18} />
-                                            <h3 className="text-sm font-bold uppercase tracking-widest">Анализ AI</h3>
+                                    <div className="space-y-4">
+                                        <div className="p-5 bg-primary/5 rounded-2xl border border-primary/10">
+                                            <div className="flex items-center gap-2 text-primary mb-3">
+                                                <Sparkles size={18} />
+                                                <h3 className="text-sm font-bold uppercase tracking-widest">Анализ AI</h3>
+                                            </div>
+                                            <p className="text-sm leading-relaxed text-muted-foreground italic">
+                                                "{selectedOrder.ai_analysis}"
+                                            </p>
                                         </div>
-                                        <p className="text-sm leading-relaxed text-muted-foreground italic">
-                                            "{selectedOrder.ai_analysis}"
-                                        </p>
+
+                                        {selectedOrder.quiz_answers && (
+                                            <div className="p-5 bg-muted/30 rounded-2xl border border-transparent">
+                                                <h3 className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-4">Ответы на тест</h3>
+                                                <div className="grid grid-cols-2 gap-4">
+                                                    {Object.entries(selectedOrder.quiz_answers).map(([key, value]) => (
+                                                        <div key={key} className="flex flex-col">
+                                                            <span className="text-[10px] text-muted-foreground uppercase tracking-wider">{key}</span>
+                                                            <span className="text-sm font-semibold">{String(value)}</span>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        )}
                                     </div>
                                 )}
 

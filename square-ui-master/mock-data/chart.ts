@@ -2,6 +2,7 @@ export type ChartDataPoint = {
   month: string;
   newLeads: number;
   replied: number;
+  analysis?: number;
 };
 
 export const mockChartData: ChartDataPoint[] = [

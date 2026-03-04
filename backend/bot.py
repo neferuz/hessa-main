@@ -6,20 +6,16 @@ from aiogram.filters import Command
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, WebAppInfo, InlineKeyboardMarkup, InlineKeyboardButton
 from dotenv import load_dotenv
 
-# Load environment variables
 load_dotenv()
 
 TOKEN = os.getenv("BOT_TOKEN")
-WEBAPP_URL = os.getenv("WEBAPP_URL", "https://hessa.uz") # Default if not set
+WEBAPP_URL = os.getenv("WEBAPP_URL", "https://hessa.uz")
 
 if not TOKEN:
-    # Use the token provided by user if not in .env
     TOKEN = "8045133629:AAGMUrr51SLiyJ37b74g71AqLVAV9HNBDd4"
 
-# Configure logging
 logging.basicConfig(level=logging.INFO)
 
-# Initialize bot and dispatcher
 bot = Bot(token=TOKEN)
 dp = Dispatcher()
 
@@ -27,34 +23,34 @@ dp = Dispatcher()
 async def cmd_start(message: types.Message):
     """
     Handle /start command.
-    Request phone number from user.
     """
     kb = [
         [
-            KeyboardButton(text="Отправить номер телефона 📱", request_contact=True)
+            KeyboardButton(text="📱 Отправить номер телефона", request_contact=True)
         ]
     ]
     keyboard = ReplyKeyboardMarkup(keyboard=kb, resize_keyboard=True, one_time_keyboard=True)
     
     await message.answer(
-        "Добро пожаловать в HESSA! 👋\n\n"
-        "Для продолжения и персонализации вашего опыта, пожалуйста, поделитесь вашим номером телефона.",
-        reply_markup=keyboard
+        "👋 Рады видеть вас в HESSA!\n\n"
+        "Мы создаем персональные наборы витаминов, основанные на ваших биоритмах и образе жизни.\n\n"
+        "Чтобы начать, пожалуйста, **поделитесь вашим номером телефона**, нажав на кнопку ниже. "
+        "Это поможет нам сохранить ваш профиль и результаты тестов.",
+        reply_markup=keyboard,
+        parse_mode="Markdown"
     )
 
 @dp.message(F.contact)
 async def handle_contact(message: types.Message):
     """
-    Handle shared contact.
+    Handle shared contact and show WebApp button.
     """
     contact = message.contact
-    # Here you would typically save the contact to the database
-    # For now, just thank the user and show the WebApp button
     
     inline_kb = [
         [
             InlineKeyboardButton(
-                text="Заказать витамины 💊", 
+                text="💊 Открыть Hessa Mini App", 
                 web_app=WebAppInfo(url=WEBAPP_URL)
             )
         ]
@@ -62,9 +58,11 @@ async def handle_contact(message: types.Message):
     keyboard = InlineKeyboardMarkup(inline_keyboard=inline_kb)
     
     await message.answer(
-        f"Спасибо, {contact.first_name}! Ваша регистрация завершена. ✅\n\n"
-        "Теперь вы можете открыть наш магазин и заказать персональные витамины Hessa прямо здесь, в Telegram.",
-        reply_markup=keyboard
+        f"✅ Приятно познакомиться, {contact.first_name}!\n\n"
+        "Теперь вы готовы к прохождению теста и заказу витаминов. "
+        "Нажмите на кнопку ниже, чтобы войти в наше приложение.",
+        reply_markup=keyboard,
+        parse_mode="Markdown"
     )
 
 async def main():

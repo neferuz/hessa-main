@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { MapPin, Phone, Mail, Send } from "lucide-react";
 import styles from "./Contacts.module.css";
 
@@ -112,6 +112,12 @@ export default function ContactsPage() {
     });
     const [sending, setSending] = useState(false);
 
+    const containerRef = useRef(null);
+    const { scrollYProgress } = useScroll();
+
+    const y1 = useTransform(scrollYProgress, [0, 1], [0, -300]);
+    const y2 = useTransform(scrollYProgress, [0, 1], [0, 400]);
+
     useEffect(() => {
         fetchContactsInfo();
 
@@ -157,7 +163,6 @@ export default function ContactsPage() {
 
         setSending(true);
         try {
-            // Здесь можно добавить отправку на сервер
             await new Promise(resolve => setTimeout(resolve, 1000));
             alert(t('successMessage'));
             setFormData({ name: "", subject: "", phone: "", message: "" });
@@ -173,7 +178,14 @@ export default function ContactsPage() {
     }
 
     return (
-        <div className={styles.pageWrapper}>
+        <div ref={containerRef} className={styles.pageWrapper}>
+            {/* Premium Grain Texture */}
+            <div className={styles.grain} />
+
+            {/* Background Parallax Blobs */}
+            <motion.div style={{ y: y1 }} className={`${styles.bgBlob} ${styles.blob1}`} />
+            <motion.div style={{ y: y2 }} className={`${styles.bgBlob} ${styles.blob2}`} />
+
             <Navbar />
             <main className={styles.main}>
                 {/* Header */}
@@ -319,3 +331,4 @@ export default function ContactsPage() {
         </div>
     );
 }
+

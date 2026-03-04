@@ -1,6 +1,120 @@
+.pageWrapper {
+    position: relative;
+    width: 100%;
+}
+
 .aboutContainer {
     min-height: 100vh;
-    background: #ffffff;
+    background: #eef1f8;
+    position: relative;
+    z-index: 1;
+}
+
+.grain {
+    position: fixed;
+    top: -50%;
+    left: -50%;
+    right: -50%;
+    bottom: -50%;
+    width: 200%;
+    height: 200%;
+    /* animation: noise 0.2s infinite; Removed for performance optimization */
+    z-index: 100;
+    pointer-events: none;
+}
+
+@keyframes noise {
+    0% {
+        transform: translate(0, 0)
+    }
+
+    10% {
+        transform: translate(-5%, -5%)
+    }
+
+    20% {
+        transform: translate(-10%, 5%)
+    }
+
+    30% {
+        transform: translate(5%, -10%)
+    }
+
+    40% {
+        transform: translate(-5%, 15%)
+    }
+
+    50% {
+        transform: translate(-10%, 5%)
+    }
+
+    60% {
+        transform: translate(15%, 0)
+    }
+
+    70% {
+        transform: translate(0, 10%)
+    }
+
+    80% {
+        transform: translate(-15%, 0)
+    }
+
+    90% {
+        transform: translate(10%, 5%)
+    }
+
+    100% {
+        transform: translate(5%, 0)
+    }
+}
+
+.bgBlob {
+    position: absolute;
+    width: 800px;
+    height: 800px;
+    background: radial-gradient(circle, rgba(73, 122, 155, 0.12) 0%, rgba(255, 255, 255, 0) 70%);
+    filter: blur(100px);
+    z-index: 0;
+    pointer-events: none;
+    will-change: transform;
+    /* animation: float 25s infinite alternate ease-in-out; Removed for performance optimization */
+}
+
+.blob1 {
+    top: -200px;
+    left: -300px;
+    width: 1000px;
+    height: 1000px;
+    background: radial-gradient(circle, rgba(73, 122, 155, 0.15) 0%, rgba(255, 255, 255, 0) 70%);
+}
+
+.blob2 {
+    top: 40%;
+    right: -300px;
+    width: 900px;
+    height: 900px;
+    background: radial-gradient(circle, rgba(255, 72, 81, 0.08) 0%, rgba(255, 255, 255, 0) 70%);
+    animation-delay: -7s;
+    animation-duration: 30s;
+}
+
+@keyframes float {
+    0% {
+        transform: translate(0, 0) rotate(0deg) scale(1);
+    }
+
+    33% {
+        transform: translate(30px, -50px) rotate(10deg) scale(1.1);
+    }
+
+    66% {
+        transform: translate(-20px, 40px) rotate(-15deg) scale(0.9);
+    }
+
+    100% {
+        transform: translate(0, 0) rotate(0deg) scale(1);
+    }
 }
 
 /* --- REUSING PROJECT STYLES --- */
@@ -9,8 +123,6 @@
 .heroWrapper {
     width: 100%;
     padding: 160px 6% 100px;
-    /* Increased side padding */
-    background: #ffffff;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -25,7 +137,7 @@
     text-align: center;
     letter-spacing: -0.04em;
     color: #1a1a1a;
-    font-family: var(--font-manrope);
+    font-family: var(--font-unbounded);
     text-transform: uppercase;
 }
 
@@ -66,7 +178,6 @@
 .benefitsSection {
     width: 100%;
     padding: 120px 6%;
-    background: #ffffff;
     border-top: 1px solid rgba(0, 0, 0, 0.05);
 }
 
@@ -94,7 +205,8 @@
 
 .benefitTitle {
     font-size: 2.8rem;
-    font-weight: 800;
+    font-weight: 500;
+    font-family: var(--font-unbounded);
     color: #1a1a1a;
     margin-bottom: 0.5rem;
     letter-spacing: -0.03em;
@@ -112,7 +224,6 @@
 /* VALUES SECTION */
 .valuesSection {
     padding: 140px 6%;
-    background: #fafafa;
 }
 
 .container {
@@ -128,8 +239,9 @@
 }
 
 .sectionTitle {
+    font-family: var(--font-unbounded);
     font-size: 3rem;
-    font-weight: 800;
+    font-weight: 500;
     color: #1a1a1a;
     letter-spacing: -0.02em;
 }
@@ -168,8 +280,9 @@
 }
 
 .cardTitle {
+    font-family: var(--font-unbounded);
     font-size: 1.5rem;
-    font-weight: 800;
+    font-weight: 500;
     color: #1a1a1a;
     letter-spacing: -0.01em;
 }

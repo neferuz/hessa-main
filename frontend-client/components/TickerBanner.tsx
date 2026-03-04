@@ -2,15 +2,22 @@
 
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
-import { Truck, CreditCard, ShieldCheck } from "lucide-react";
+import { Truck, CreditCard, ShieldCheck, Sparkles } from "lucide-react";
 import styles from "./TickerBanner.module.css";
+
+const getIcon = (text: string) => {
+    const t = text.toLowerCase();
+    if (t.includes("доставка") || t.includes("delivery")) return <Truck size={20} />;
+    if (t.includes("оплата") || t.includes("pay") || t.includes("долями")) return <CreditCard size={20} />;
+    if (t.includes("гарантия") || t.includes("quality") || t.includes("100%")) return <ShieldCheck size={20} />;
+    return <Sparkles size={18} />;
+};
 
 export default function TickerBanner() {
     const [items, setItems] = useState<any[]>([]);
     const [lang, setLang] = useState("RU");
 
     useEffect(() => {
-        // Fetch Content
         const fetchContent = async () => {
             try {
                 const res = await fetch('http://localhost:8000/api/content');
@@ -22,7 +29,6 @@ export default function TickerBanner() {
         };
         fetchContent();
 
-        // Lang Listener
         const checkLang = () => {
             const l = (window as any).currentLang || "RU";
             setLang(l);
@@ -42,16 +48,20 @@ export default function TickerBanner() {
     return (
         <div className={styles.tickerContainer}>
             <div className={styles.tickerTrack}>
-                {[...Array(2)].map((_, i) => (
+                {[...Array(4)].map((_, i) => (
                     <div key={i} className={styles.tickerGroup}>
-                        {items.map((item, idx) => (
-                            <div key={idx} className={styles.tickerItem} style={{ fontFamily: 'var(--font-montserrat)' }}>
-                                {getText(item)}
-                            </div>
-                        ))}
+                        {items.map((item, idx) => {
+                            const text = getText(item);
+                            return (
+                                <div key={idx} className={styles.tickerItem}>
+                                    {text}
+                                </div>
+                            );
+                        })}
                     </div>
                 ))}
             </div>
         </div>
     );
 }
+

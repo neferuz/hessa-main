@@ -10,9 +10,10 @@ interface QuizViewProps {
     setCurrentStepIndex: React.Dispatch<React.SetStateAction<number>>;
     answers: Record<string, string>;
     setAnswers: React.Dispatch<React.SetStateAction<Record<string, string>>>;
+    onNext?: () => void;
 }
 
-export default function QuizView({ setView, questions, currentStepIndex, setCurrentStepIndex, answers, setAnswers }: QuizViewProps) {
+export default function QuizView({ setView, questions, currentStepIndex, setCurrentStepIndex, answers, setAnswers, onNext }: QuizViewProps) {
     // Защита от некорректного индекса
     const safeIndex = Math.max(0, Math.min(currentStepIndex, questions.length - 1));
     const currentQuestion = questions[safeIndex];
@@ -34,17 +35,29 @@ export default function QuizView({ setView, questions, currentStepIndex, setCurr
     }
 
     const progressPercentage = ((safeIndex + 1) / questions.length) * 100;
-    const isStepComplete = () => currentQuestion.type === 'input' ? (answers[currentQuestion.id] || "").trim().length > 0 : !!answers[currentQuestion.id];
+
+    const isStepComplete = () => {
+        if (currentQuestion.type === 'input') {
+            return (answers[currentQuestion.id] || "").trim().length > 0;
+        }
+        // For options, ensure something is selected
+        const currentAnswer = answers[currentQuestion.id] || "";
+        return currentAnswer.length > 0;
+    };
+
     const canGoBack = safeIndex > 0;
 
     const handleQuizAnswer = (val: string) => {
         if (currentQuestion.multiple) {
             setAnswers(prev => {
-                const current = prev[currentQuestion.id] ? prev[currentQuestion.id].split(',') : [];
-                const updated = current.includes(val)
-                    ? current.filter(id => id !== val)
-                    : [...current, val];
-                return { ...prev, [currentQuestion.id]: updated.join(',') };
+                const currentVal = prev[currentQuestion.id] || "";
+                const currentArray = currentVal ? currentVal.split(',').filter(Boolean) : [];
+
+                const updatedArray = currentArray.includes(val)
+                    ? currentArray.filter(id => id !== val)
+                    : [...currentArray, val];
+
+                return { ...prev, [currentQuestion.id]: updatedArray.join(',') };
             });
         } else {
             setAnswers(prev => ({ ...prev, [currentQuestion.id]: val }));
@@ -52,6 +65,11 @@ export default function QuizView({ setView, questions, currentStepIndex, setCurr
     };
 
     const handleNext = () => {
+        if (onNext) {
+            onNext();
+            return;
+        }
+
         if (safeIndex < questions.length - 1) {
             setCurrentStepIndex(prev => Math.min(prev + 1, questions.length - 1));
         } else {
@@ -76,10 +94,21 @@ export default function QuizView({ setView, questions, currentStepIndex, setCurr
                     <ChevronLeft className={styles.backArrow} size={18} />
                     <span>Назад</span>
                 </button>
-                <span className={styles.blockTitle}>Вопрос {safeIndex + 1} из {questions.length}</span>
+                <div className={styles.progressContainer}>
+                    <span className={styles.percentageText}>{Math.round(progressPercentage)}%</span>
+                    <div className={styles.miniProgressBg}>
+                        <motion.div
+                            className={styles.miniProgressFill}
+                            initial={{ width: 0 }}
+                            animate={{ width: `${progressPercentage}%` }}
+                            transition={{ duration: 0.5 }}
+                        />
+                    </div>
+                </div>
                 <div style={{ width: '80px' }}></div>
             </div>
-            <div className={styles.progressBarBg} style={{ marginBottom: '2rem' }}>
+            {/* Main Progress Bar (Optional, can keep or remove since we added mini one) */}
+            <div className={styles.progressBarBg} style={{ marginBottom: '2rem', height: '4px', opacity: 0.5 }}>
                 <motion.div className={styles.progressBarFill} initial={{ width: 0 }} animate={{ width: `${progressPercentage}%` }} transition={{ duration: 0.5 }} />
             </div>
             <AnimatePresence mode="wait">
@@ -87,25 +116,29 @@ export default function QuizView({ setView, questions, currentStepIndex, setCurr
                     <h2 className={styles.title}>{currentQuestion.label}</h2>
                     {currentQuestion.type === 'input' && <input type="text" placeholder={currentQuestion.placeholder} className={styles.inputField} value={answers[currentQuestion.id] || ""} onChange={(e) => handleQuizAnswer(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter' && isStepComplete()) handleNext(); }} autoFocus />}
                     {currentQuestion.type === 'options' && (
-                        <div className={styles.optionsGrid}>
-                            {currentQuestion.options?.map(opt => {
-                                const isActive = currentQuestion.multiple
-                                    ? (answers[currentQuestion.id] || "").split(',').includes(opt.id)
-                                    : answers[currentQuestion.id] === opt.id;
+                        <div className={styles.optionsFlex}>
+                            <div className={styles.optionsGrid} style={{ gridTemplateColumns: currentQuestion.options && currentQuestion.options.length <= 2 ? '1fr' : 'repeat(2, 1fr)' }}>
+                                {currentQuestion.options?.map(opt => {
+                                    const selectedIds = (answers[currentQuestion.id] || "").split(',').filter(Boolean);
+                                    const isActive = currentQuestion.multiple
+                                        ? selectedIds.includes(opt.id)
+                                        : answers[currentQuestion.id] === opt.id;
 
-                                return (
-                                    <div
-                                        key={opt.id}
-                                        className={`${styles.optionCard} ${isActive ? styles.optionActive : ""}`}
-                                        onClick={() => handleQuizAnswer(opt.id)}
-                                    >
-                                        <span className={styles.optionText}>{opt.text}</span>
-                                        <div className={styles.checkCircle}>
-                                            {isActive && <Check size={14} strokeWidth={3} />}
+                                    return (
+                                        <div
+                                            key={opt.id}
+                                            className={`${styles.optionCard} ${isActive ? styles.optionActive : ""}`}
+                                            onClick={() => handleQuizAnswer(opt.id)}
+                                            style={{ minHeight: '60px', padding: '1rem' }}
+                                        >
+                                            <span className={styles.optionText}>{opt.text}</span>
+                                            <div className={styles.checkCircle}>
+                                                {isActive && <Check size={14} strokeWidth={3} />}
+                                            </div>
                                         </div>
-                                    </div>
-                                );
-                            })}
+                                    );
+                                })}
+                            </div>
                         </div>
                     )}
                 </motion.div>

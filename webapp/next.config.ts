@@ -14,6 +14,14 @@ const nextConfig: NextConfig = {
         hostname: 'i.pinimg.com',
       },
       {
+        protocol: 'https',
+        hostname: 't.me',
+      },
+      {
+        protocol: 'https',
+        hostname: '*.telegram.org',
+      },
+      {
         protocol: 'http',
         hostname: 'localhost',
         port: '8000',
@@ -38,14 +46,6 @@ const nextConfig: NextConfig = {
         pathname: '/**',
       },
     ],
-  },
-  async rewrites() {
-    return [
-      {
-        source: '/static/:path*',
-        destination: 'http://localhost:8000/static/:path*',
-      },
-    ];
   },
 };
 

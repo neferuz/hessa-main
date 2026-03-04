@@ -20,6 +20,7 @@ class OrderBase(BaseModel):
     total_amount: float = 0.0
     duration: int = 1
     ai_analysis: Optional[str] = None
+    quiz_answers: Optional[Dict] = None
     referral_code: Optional[str] = None
 
 class OrderCreate(OrderBase):

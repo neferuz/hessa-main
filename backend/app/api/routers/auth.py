@@ -2,15 +2,29 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from ...core.database import get_db
-from ...schemas.auth import RequestCodePayload, VerifyCodePayload, AuthUserResponse
+from ...schemas.auth import RequestCodePayload, VerifyCodePayload, AuthUserResponse, TelegramAuthPayload
 from ...schemas.admin import AdminLogin, AdminResponse
 from ...services.auth_service import AuthService
 from ...services.admin_service import AdminService
+from ...services.telegram_auth_service import TelegramAuthService
 
 from ...schemas.qr_login import QRGenerateResponse, QRStatusResponse, QRAuthorizePayload
 from ...services.qr_service import QRService
 
 router = APIRouter(prefix="/auth", tags=["auth"])
+
+
+@router.post("/telegram/login", response_model=AuthUserResponse)
+async def telegram_login(payload: TelegramAuthPayload, db: AsyncSession = Depends(get_db)):
+    """
+    Авторизация через Telegram Mini App.
+    """
+    from fastapi import HTTPException
+    service = TelegramAuthService(db)
+    user = await service.authenticate(payload.initData, payload.referral_code)
+    if not user:
+        raise HTTPException(status_code=401, detail="Invalid Telegram data")
+    return user
 
 
 @router.get("/qr/generate", response_model=QRGenerateResponse)

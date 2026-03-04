@@ -24,6 +24,7 @@ class OrderService:
             total_amount=order_data.total_amount,
             duration=order_data.duration,
             ai_analysis=order_data.ai_analysis,
+            quiz_answers=order_data.quiz_answers,
             referral_code=order_data.referral_code
         )
         return await self.repository.create(db_order)

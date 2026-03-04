@@ -4,7 +4,6 @@ import styles from "./CompanyTicker.module.css";
 
 export default function CompanyTicker() {
     const slogans = [
-        "Эффективно",
         "Безопасно",
         "Универсально",
         "Энергия",
@@ -12,7 +11,8 @@ export default function CompanyTicker() {
         "Иммунитет",
         "Защита",
         "Для бизнеса",
-        "Корпоративный стиль"
+        "Корпоративный стиль",
+        "Эффективно"
     ];
 
     return (

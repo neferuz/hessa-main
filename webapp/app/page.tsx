@@ -14,8 +14,8 @@ export default function Home() {
   return (
     <main className="min-h-screen pb-32 bg-[#FAFAFB] relative max-w-md mx-auto overflow-x-hidden font-inter">
       {/* Decorative Mesh Gradient */}
-      <div className="absolute top-[-10%] right-[-10%] w-[300px] h-[300px] bg-blue-400/10 blur-[100px] rounded-full z-0" />
-      <div className="absolute top-[5%] left-[-10%] w-[250px] h-[250px] bg-emerald-400/5 blur-[80px] rounded-full z-0" />
+      <div className="absolute top-[-5%] right-[-5%] w-[350px] h-[350px] bg-[#00a8a8]/10 blur-[120px] rounded-full z-0 pointer-events-none" />
+      <div className="absolute top-[10%] left-[-10%] w-[300px] h-[300px] bg-blue-400/5 blur-[100px] rounded-full z-0 pointer-events-none" />
 
       <div className="relative z-10">
         <Header />

@@ -2,11 +2,12 @@
     width: 100%;
     background: #497a9b;
     color: white;
-    padding: 1.2rem 0;
+    padding: 0.8rem 0;
     overflow: hidden;
     white-space: nowrap;
     position: relative;
     z-index: 20;
+    margin: 40px 0;
 }
 
 @keyframes ticker {
@@ -43,22 +44,20 @@
     gap: 1rem;
     font-family: var(--font-unbounded), sans-serif;
     font-size: 1rem;
-    font-weight: 400;
+    font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.05em;
     padding: 0 3rem;
-    /* Spacing between items */
     position: relative;
     white-space: nowrap;
 }
 
-/* Star separator */
 .tickerItem::after {
     content: "✦";
     position: absolute;
     right: 0;
     transform: translateX(50%);
-    color: rgba(255, 255, 255, 0.3);
+    color: rgba(255, 255, 255, 0.4);
     font-size: 0.8em;
 }
 

@@ -9,8 +9,14 @@ interface DashboardState {
   documents: Document[];
   chartData: ChartDataPoint[];
   stats: StatCard[];
+  recentOrders: any[];
+  recentAnalysis: any[];
   searchQuery: string;
   setSearchQuery: (query: string) => void;
+  setChartData: (data: ChartDataPoint[]) => void;
+  setRecentOrders: (data: any[]) => void;
+  setRecentAnalysis: (data: any[]) => void;
+  setPeople: (data: any[]) => void;
   getFilteredPeople: () => Person[];
 }
 
@@ -19,9 +25,23 @@ export const useDashboardStore = create<DashboardState>((set, get) => ({
   documents: mockDocuments,
   chartData: mockChartData,
   stats: mockStats,
+  recentOrders: [],
+  recentAnalysis: [],
   searchQuery: "",
   setSearchQuery: (query) => {
     set({ searchQuery: query });
+  },
+  setChartData: (data) => {
+    set({ chartData: data });
+  },
+  setRecentOrders: (data) => {
+    set({ recentOrders: data });
+  },
+  setRecentAnalysis: (data) => {
+    set({ recentAnalysis: data });
+  },
+  setPeople: (data) => {
+    set({ people: data as any });
   },
   getFilteredPeople: () => {
     const { people, searchQuery } = get();

@@ -412,7 +412,7 @@ export default function CompaniesPage() {
                                 alt={audience1Name}
                                 fill
                                 loading="lazy"
-                                className={styles.heroImage}
+                                className={styles.productImg}
                                 sizes="(max-width: 768px) 100vw, 50vw"
                             />
                         </div>
@@ -435,7 +435,7 @@ export default function CompaniesPage() {
                                 alt={audience2Name}
                                 fill
                                 loading="lazy"
-                                className={styles.heroImage}
+                                className={styles.productImg}
                                 sizes="(max-width: 768px) 100vw, 50vw"
                             />
                         </div>
@@ -458,7 +458,7 @@ export default function CompaniesPage() {
                                 alt={audience3Name}
                                 fill
                                 loading="lazy"
-                                className={styles.heroImage}
+                                className={styles.productImg}
                                 sizes="(max-width: 768px) 100vw, 50vw"
                             />
                         </div>
@@ -481,7 +481,7 @@ export default function CompaniesPage() {
                                 alt={audience4Name}
                                 fill
                                 loading="lazy"
-                                className={styles.heroImage}
+                                className={styles.productImg}
                                 sizes="(max-width: 768px) 100vw, 50vw"
                             />
                         </div>
@@ -518,7 +518,7 @@ export default function CompaniesPage() {
                                         alt={audience1Name}
                                         fill
                                         loading="lazy"
-                                        className={styles.heroImage}
+                                        className={styles.productImg}
                                         sizes="(max-width: 768px) 100vw, 50vw"
                                     />
                                 </div>
@@ -543,7 +543,7 @@ export default function CompaniesPage() {
                                         alt={audience2Name}
                                         fill
                                         loading="lazy"
-                                        className={styles.heroImage}
+                                        className={styles.productImg}
                                         sizes="(max-width: 768px) 100vw, 50vw"
                                     />
                                 </div>
@@ -568,7 +568,7 @@ export default function CompaniesPage() {
                                         alt={audience3Name}
                                         fill
                                         loading="lazy"
-                                        className={styles.heroImage}
+                                        className={styles.productImg}
                                         sizes="(max-width: 768px) 100vw, 50vw"
                                     />
                                 </div>
@@ -593,7 +593,7 @@ export default function CompaniesPage() {
                                         alt={audience4Name}
                                         fill
                                         loading="lazy"
-                                        className={styles.heroImage}
+                                        className={styles.productImg}
                                         sizes="(max-width: 768px) 100vw, 50vw"
                                     />
                                 </div>
@@ -626,7 +626,7 @@ export default function CompaniesPage() {
                                 src={process1Image}
                                 alt={process1Title}
                                 fill
-                                className={styles.heroImage}
+                                className={styles.productImg}
                             />
                         </div>
                         <div className={styles.productContent} style={{ textAlign: "left" }}>
@@ -651,7 +651,7 @@ export default function CompaniesPage() {
                                 alt={process2Title}
                                 fill
                                 loading="lazy"
-                                className={styles.heroImage}
+                                className={styles.productImg}
                             />
                         </div>
                         <div className={styles.productContent} style={{ textAlign: "left" }}>
@@ -676,7 +676,7 @@ export default function CompaniesPage() {
                                 alt={process3Title}
                                 fill
                                 loading="lazy"
-                                className={styles.heroImage}
+                                className={styles.productImg}
                             />
                         </div>
                         <div className={styles.productContent} style={{ textAlign: "left" }}>

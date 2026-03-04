@@ -26,6 +26,7 @@ import { useDashboardStore } from "@/store/dashboard-store";
 const NEW_LEADS_COLOR_LIGHT = "#252C2C";
 const NEW_LEADS_COLOR_DARK = "#E8E9ED"; // Gris clair pour dark mode
 const REPLIED_COLOR = "#888DF9";
+const ANALYSIS_COLOR = "#10b981";
 
 // Couleurs pour les labels selon le thème
 const LABEL_COLOR_LIGHT = "#95979d";
@@ -72,7 +73,7 @@ export function ChartCard() {
         <div className="flex items-center gap-2">
           <Users className="size-4 text-muted-foreground" />
           <h2 className="text-[15px] font-normal text-foreground tracking-[-0.45px]">
-            Leads Over Time
+            Активность за неделю
           </h2>
         </div>
         <Popover open={open} onOpenChange={setOpen}>
@@ -108,7 +109,7 @@ export function ChartCard() {
             style={{ backgroundColor: newLeadsColor }}
           />
           <span className="text-xs font-medium text-muted-foreground tracking-[-0.24px]">
-            New Leads
+            Новые клиенты
           </span>
         </div>
         <div className="flex items-center gap-1.5">
@@ -117,7 +118,16 @@ export function ChartCard() {
             style={{ backgroundColor: REPLIED_COLOR }}
           />
           <span className="text-xs font-medium text-muted-foreground tracking-[-0.24px]">
-            Replied
+            Заказы
+          </span>
+        </div>
+        <div className="flex items-center gap-1.5">
+          <div
+            className="size-3 rounded-full"
+            style={{ backgroundColor: ANALYSIS_COLOR }}
+          />
+          <span className="text-xs font-medium text-muted-foreground tracking-[-0.24px]">
+            Анализы
           </span>
         </div>
       </div>
@@ -159,12 +169,6 @@ export function ChartCard() {
               }}
               axisLine={false}
               tickLine={false}
-              domain={[0, 1000]}
-              ticks={[0, 250, 500, 750, 1000]}
-              tickFormatter={(value) => {
-                if (value === 1000) return "1,000";
-                return value.toString();
-              }}
               style={{
                 letterSpacing: "-0.24px",
               }}
@@ -200,7 +204,7 @@ export function ChartCard() {
                           style={{ backgroundColor: newLeadsColor }}
                         />
                         <span className="flex-1 text-xs font-medium text-foreground tracking-[-0.24px]">
-                          {newLeadsEntry.value}
+                          Новые клиенты: {newLeadsEntry.value}
                         </span>
                         <span className="text-xs font-medium text-muted-foreground tracking-[-0.24px]">
                           +92
@@ -214,10 +218,21 @@ export function ChartCard() {
                           style={{ backgroundColor: REPLIED_COLOR }}
                         />
                         <span className="flex-1 text-xs font-medium text-foreground tracking-[-0.24px]">
-                          {repliedEntry.value}
+                          Заказы: {repliedEntry.value}
                         </span>
                         <span className="text-xs font-medium text-[#888df9] tracking-[-0.24px]">
                           +67
+                        </span>
+                      </div>
+                    )}
+                    {payload.find(p => p.dataKey === 'analysis') && (
+                      <div className="flex items-center gap-1.5 mt-1">
+                        <div
+                          className="size-2.5 rounded-full"
+                          style={{ backgroundColor: ANALYSIS_COLOR }}
+                        />
+                        <span className="flex-1 text-xs font-medium text-foreground tracking-[-0.24px]">
+                          Анализы: {payload.find(p => p.dataKey === 'analysis')?.value}
                         </span>
                       </div>
                     )}
@@ -234,8 +249,14 @@ export function ChartCard() {
             <Bar
               dataKey="replied"
               fill={REPLIED_COLOR}
-              radius={[4.912, 4.912, 0, 0]}
-              barSize={30}
+              radius={[4, 4, 0, 0]}
+              barSize={20}
+            />
+            <Bar
+              dataKey="analysis"
+              fill={ANALYSIS_COLOR}
+              radius={[4, 4, 0, 0]}
+              barSize={20}
             />
           </BarChart>
         </ResponsiveContainer>

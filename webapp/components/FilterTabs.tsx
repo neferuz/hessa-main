@@ -26,16 +26,7 @@ const CATEGORY_ICONS: Record<string, any> = {
     "Фигура и метаболизм": Heart,
 };
 
-const DEFAULT_CATEGORIES = [
-    "Все товары",
-    "Иммунитет и энергия",
-    "Здоровье крови",
-    "Нервная система",
-    "Сердце и мозг",
-    "Женское здоровье",
-    "Мужской набор",
-    "Фигура и метаболизм"
-];
+const DEFAULT_CATEGORIES = ["Все товары"];
 
 export default function FilterTabs({ active, setActive }: FilterTabsProps) {
     const [categories, setCategories] = useState<string[]>(DEFAULT_CATEGORIES);
@@ -72,10 +63,10 @@ export default function FilterTabs({ active, setActive }: FilterTabsProps) {
     }
 
     return (
-        <div className="mb-8">
-            <div className="px-6 flex items-baseline justify-between mb-4">
-                <h3 className="text-[18px] font-black text-[#1C1C1E] tracking-tight">Категории</h3>
-                <button className="text-[11px] text-blue-600 font-bold uppercase tracking-widest">Все</button>
+        <div className="mb-6 relative z-10">
+            <div className="px-6 flex items-baseline justify-between mb-3">
+                <h3 className="text-[18px] font-black text-[#1C1C1E] tracking-tight text-center">Категории</h3>
+                <button className="text-[11px] text-blue-600 font-bold uppercase tracking-widest active:opacity-70 transition-opacity">Все</button>
             </div>
 
             <div className="px-6 overflow-x-auto no-scrollbar">

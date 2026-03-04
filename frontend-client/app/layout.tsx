@@ -5,6 +5,7 @@ import ConditionalNavbar from "@/components/ConditionalNavbar";
 import SmoothScroll from "@/components/ui/SmoothScroll";
 import CustomCursor from "@/components/ui/CustomCursor";
 import ChatWidget from "@/components/ChatWidget";
+import { Toaster } from "sonner";
 
 const manrope = Manrope({ // Configured Manrope
   subsets: ["latin", "cyrillic"],
@@ -42,6 +43,7 @@ export default function RootLayout({
           <ConditionalNavbar />
           {children}
           <ChatWidget />
+          <Toaster position="bottom-right" richColors expand={true} />
         </SmoothScroll>
       </body>
     </html>

@@ -49,17 +49,30 @@ class ProductBase(BaseModel):
     sale_price: float = 0.0
     composition: Optional[dict] = None
     plans: Optional[List[dict]] = []
+    is_active: bool = True
 
 class ProductCreate(ProductBase):
     pass
 
-class ProductUpdate(ProductBase):
+class ProductUpdate(BaseModel):
     name: Optional[str] = None
     sku: Optional[str] = None
     category_id: Optional[int] = None
-    # All other fields optional for update... 
-    # For simplicity in this iteration, we might just require full object or use generic update logic.
-    # Let's keep it simple for now and expect full updates or specific patches.
+    stock: Optional[int] = None
+    description_short: Optional[str] = None
+    description_full: Optional[str] = None
+    images: Optional[List[str]] = None
+    size_volume: Optional[str] = None
+    details: Optional[str] = None
+    usage: Optional[str] = None
+    delivery_info: Optional[str] = None
+    cost_price: Optional[float] = None
+    customs_percent: Optional[float] = None
+    tax_percent: Optional[float] = None
+    sale_price: Optional[float] = None
+    composition: Optional[dict] = None
+    plans: Optional[List[dict]] = None
+    is_active: Optional[bool] = None
 
 class ProductRead(ProductBase):
     id: int

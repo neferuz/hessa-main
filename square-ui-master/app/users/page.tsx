@@ -31,7 +31,9 @@ import {
     CircleDashed,
     UserPlus,
     ChevronRight,
-    Shield
+    Shield,
+    ShieldBan,
+    ShieldCheck
 } from "lucide-react";
 import { format } from "date-fns";
 import { Label } from "@/components/ui/label";
@@ -52,6 +54,8 @@ interface User {
     role: string;
     status: "Active" | "Pending" | "Suspended";
     joinedDate: string;
+    source: "WebApp" | "Site";
+    telegramId?: string;
 }
 
 const STATUS_CONFIG = {
@@ -80,6 +84,7 @@ export default function UsersPage() {
     const [loading, setLoading] = useState(true);
     const [searchQuery, setSearchQuery] = useState("");
     const [statusFilter, setStatusFilter] = useState<"All" | "Active" | "Pending" | "Suspended">("All");
+    const [sourceFilter, setSourceFilter] = useState<"All" | "WebApp" | "Site">("All");
 
     const [isCreateOpen, setIsCreateOpen] = useState(false);
     const [newUser, setNewUser] = useState({
@@ -107,8 +112,10 @@ export default function UsersPage() {
                     email: user.email || '',
                     phone: user.phone || 'Не указано',
                     role: user.role || "Пользователь",
-                    status: (user.is_active ? "Active" : "Suspended") as any,
-                    joinedDate: user.created_at || new Date().toISOString()
+                    status: (user.is_active !== false ? "Active" : "Suspended") as any,
+                    joinedDate: user.created_at || new Date().toISOString(),
+                    source: (user.telegram_id ? "WebApp" : "Site") as "WebApp" | "Site",
+                    telegramId: user.telegram_id || undefined,
                 })) : [];
                 setUsers(formattedUsers);
             }
@@ -125,6 +132,28 @@ export default function UsersPage() {
         setIsCreateOpen(false);
     };
 
+    const handleToggleStatus = async (user: User, e: React.MouseEvent) => {
+        e.stopPropagation();
+        const newStatus = user.status === "Suspended" ? true : false;
+
+        try {
+            const res = await fetch(`http://localhost:8000/api/users/${user.id}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ is_active: newStatus }),
+            });
+            if (res.ok) {
+                toast.success(newStatus ? "Пользователь разблокирован" : "Пользователь заблокирован");
+                fetchUsers();
+            } else {
+                toast.error("Ошибка обновления статуса");
+            }
+        } catch (error) {
+            console.error(error);
+            toast.error("Ошибка соединения");
+        }
+    };
+
     const filteredUsers = users.filter(user => {
         const matchesSearch =
             user.fullName.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -132,8 +161,9 @@ export default function UsersPage() {
             user.email.toLowerCase().includes(searchQuery.toLowerCase());
 
         const matchesStatus = statusFilter === "All" || user.status === statusFilter;
+        const matchesSource = sourceFilter === "All" || user.source === sourceFilter;
 
-        return matchesSearch && matchesStatus;
+        return matchesSearch && matchesStatus && matchesSource;
     });
 
     const activeCount = users.filter(u => u.status === "Active").length;
@@ -276,8 +306,8 @@ export default function UsersPage() {
                             <motion.div className="grid grid-cols-1 md:grid-cols-4 gap-5" variants={itemVariants}>
                                 {[
                                     { label: "Всего пользователей", value: users.length, icon: Users, color: "text-primary", bg: "bg-primary/5" },
-                                    { label: "Активные", value: activeCount, icon: CheckCircle2, color: "text-emerald-600", bg: "bg-emerald-500/5" },
-                                    { label: "Ожидают", value: pendingCount, icon: CircleDashed, color: "text-amber-600", bg: "bg-amber-500/5" },
+                                    { label: "Веб-апп (Telegram)", value: users.filter(u => u.source === "WebApp").length, icon: CheckCircle2, color: "text-[#0088cc]", bg: "bg-[#0088cc]/10" },
+                                    { label: "Сайт (Web)", value: users.filter(u => u.source === "Site").length, icon: CircleDashed, color: "text-indigo-600", bg: "bg-indigo-500/10" },
                                     { label: "Заблокированы", value: suspendedCount, icon: Shield, color: "text-red-600", bg: "bg-red-500/5" },
                                 ].map((stat, idx) => (
                                     <Card key={idx} className="rounded-2xl border-border/60 bg-card/50 p-5 shadow-none flex items-center justify-between hover:border-border transition-colors">
@@ -305,23 +335,42 @@ export default function UsersPage() {
                                             className="pl-10 h-11 rounded-xl bg-card border-border/60 shadow-none focus-visible:ring-1"
                                         />
                                     </div>
-                                    <div className="flex items-center gap-2 w-full sm:w-auto overflow-x-auto pb-2 sm:pb-0">
-                                        {(["All", "Active", "Pending", "Suspended"] as const).map((status) => (
-                                            <Button
-                                                key={status}
-                                                variant={statusFilter === status ? "secondary" : "ghost"}
-                                                size="sm"
-                                                onClick={() => setStatusFilter(status)}
-                                                className={cn(
-                                                    "rounded-lg h-9 text-xs font-medium border border-transparent shadow-none",
-                                                    statusFilter === status && "bg-background border-border shadow-sm"
-                                                )}
-                                            >
-                                                {status === "All" ? "Все" :
-                                                    status === "Active" ? "Активные" :
-                                                        status === "Pending" ? "Ожидают" : "Бан"}
-                                            </Button>
-                                        ))}
+                                    <div className="flex flex-col sm:flex-row items-center gap-2 w-full sm:w-auto">
+                                        <div className="flex items-center gap-1 overflow-x-auto pb-2 sm:pb-0 w-full sm:w-auto">
+                                            {(["All", "Active", "Suspended"] as const).map((status) => (
+                                                <Button
+                                                    key={status}
+                                                    variant={statusFilter === status ? "secondary" : "ghost"}
+                                                    size="sm"
+                                                    onClick={() => setStatusFilter(status)}
+                                                    className={cn(
+                                                        "rounded-full h-8 px-4 text-[11px] font-bold border-none shadow-none ring-0",
+                                                        statusFilter === status ? "bg-primary/10 text-primary" : "text-muted-foreground"
+                                                    )}
+                                                >
+                                                    {status === "All" ? "Все статусы" :
+                                                        status === "Active" ? "Активные" : "Бан"}
+                                                </Button>
+                                            ))}
+                                        </div>
+                                        <div className="w-px h-6 bg-border hidden sm:block mx-1"></div>
+                                        <div className="flex items-center gap-1 overflow-x-auto pb-2 sm:pb-0 w-full sm:w-auto">
+                                            {(["All", "WebApp", "Site"] as const).map((source) => (
+                                                <Button
+                                                    key={source}
+                                                    variant={sourceFilter === source ? "secondary" : "ghost"}
+                                                    size="sm"
+                                                    onClick={() => setSourceFilter(source)}
+                                                    className={cn(
+                                                        "rounded-full h-8 px-4 text-[11px] font-bold border-none shadow-none ring-0",
+                                                        sourceFilter === source ? "bg-primary/10 text-primary" : "text-muted-foreground"
+                                                    )}
+                                                >
+                                                    {source === "All" ? "Все источники" :
+                                                        source === "WebApp" ? "Telegram Web App" : "Сайт"}
+                                                </Button>
+                                            ))}
+                                        </div>
                                     </div>
                                 </div>
 
@@ -388,9 +437,21 @@ export default function UsersPage() {
                                                                                 <p className="font-semibold text-foreground text-sm group-hover:text-primary transition-colors">
                                                                                     {user.fullName}
                                                                                 </p>
-                                                                                <p className="text-xs text-muted-foreground font-medium mt-0.5 opacity-70">
-                                                                                    @{user.username}
-                                                                                </p>
+                                                                                <div className="flex items-center gap-2 mt-0.5">
+                                                                                    <span className="text-xs text-muted-foreground font-medium opacity-70">
+                                                                                        @{user.username}
+                                                                                    </span>
+                                                                                    {user.source === "WebApp" && (
+                                                                                        <span className="px-1.5 py-0.5 rounded-md bg-[#0088cc]/10 text-[#0088cc] text-[10px] font-bold uppercase tracking-wider">
+                                                                                            WebApp
+                                                                                        </span>
+                                                                                    )}
+                                                                                    {user.source === "Site" && (
+                                                                                        <span className="px-1.5 py-0.5 rounded-md bg-indigo-500/10 text-indigo-600 text-[10px] font-bold uppercase tracking-wider">
+                                                                                            Сайт
+                                                                                        </span>
+                                                                                    )}
+                                                                                </div>
                                                                             </div>
                                                                         </div>
                                                                     </td>
@@ -425,13 +486,29 @@ export default function UsersPage() {
                                                                         </div>
                                                                     </td>
                                                                     <td className="py-4 px-6 text-right">
-                                                                        <Button
-                                                                            variant="ghost"
-                                                                            size="icon"
-                                                                            className="size-9 rounded-lg transition-all hover:bg-background hover:shadow-sm"
-                                                                        >
-                                                                            <ChevronRight className="size-4 text-muted-foreground" />
-                                                                        </Button>
+                                                                        <div className="flex items-center justify-end gap-1.5">
+                                                                            <Button
+                                                                                variant="ghost"
+                                                                                size="icon"
+                                                                                onClick={(e) => handleToggleStatus(user, e)}
+                                                                                className={cn(
+                                                                                    "size-8 rounded-lg transition-all shadow-none",
+                                                                                    user.status === "Suspended"
+                                                                                        ? "text-emerald-600 hover:text-emerald-700 hover:bg-emerald-500/10"
+                                                                                        : "text-red-500 hover:text-red-600 hover:bg-red-500/10"
+                                                                                )}
+                                                                                title={user.status === "Suspended" ? "Разблокировать" : "Заблокировать"}
+                                                                            >
+                                                                                {user.status === "Suspended" ? <ShieldCheck className="size-4" /> : <ShieldBan className="size-4" />}
+                                                                            </Button>
+                                                                            <Button
+                                                                                variant="ghost"
+                                                                                size="icon"
+                                                                                className="size-8 rounded-lg transition-all hover:bg-background hover:shadow-sm"
+                                                                            >
+                                                                                <ChevronRight className="size-4 text-muted-foreground" />
+                                                                            </Button>
+                                                                        </div>
                                                                     </td>
                                                                 </motion.tr>
                                                             )

@@ -46,6 +46,7 @@ class Product(Base):
     # Detailed Composition
     composition: Mapped[Optional[Dict]] = mapped_column(JSON, nullable=True) # Structured ingredient data
     plans: Mapped[Optional[List[Dict]]] = mapped_column(JSON, nullable=True) # Multiple pricing/duration options
+    is_active: Mapped[bool] = mapped_column(default=True)
     
     # Relationship
     category: Mapped["Category"] = relationship("Category", back_populates="products")

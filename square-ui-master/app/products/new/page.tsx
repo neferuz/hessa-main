@@ -68,7 +68,8 @@ function NewProductForm() {
         sale_price: 0,
         images: [] as string[],
         plans: [] as any[],
-        composition: {} as Record<string, { image: string, ingredients: any[] }>
+        composition: {} as Record<string, { image: string, ingredients: any[] }>,
+        is_active: true
     });
 
     const handleAddComponent = () => {
@@ -347,6 +348,7 @@ function NewProductForm() {
                 customs_percent: parseFloat(formData.customs_percent as any) || 0,
                 tax_percent: parseFloat(formData.tax_percent as any) || 0,
                 sale_price: parseFloat(formData.sale_price as any) || 0,
+                is_active: formData.is_active,
                 images: formData.images.length > 0 ? formData.images : ["https://placehold.co/600x400/png?text=No+Image"]
             };
 
@@ -497,6 +499,18 @@ function NewProductForm() {
                                                         className="h-9"
                                                     />
                                                 </div>
+                                            </div>
+                                            <div className="flex items-center space-x-2 pt-2">
+                                                <input
+                                                    type="checkbox"
+                                                    id="is_active"
+                                                    checked={formData.is_active}
+                                                    onChange={e => handleChange('is_active', e.target.checked)}
+                                                    className="size-4 rounded border-gray-300 text-primary focus:ring-primary"
+                                                />
+                                                <Label htmlFor="is_active" className="text-sm font-semibold cursor-pointer">
+                                                    Активен (отображается на сайте и в приложении)
+                                                </Label>
                                             </div>
                                         </CardContent>
                                     </Card>

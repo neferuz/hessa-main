@@ -4,11 +4,13 @@ import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import styles from "../login/page.module.css";
 import { ViewState, QuestionStep } from "../login/types";
+import { motion, useScroll, useTransform } from "framer-motion";
 
 // Import Components (reusing from login/components)
 import QuizView from "../login/components/QuizView";
 import AnalyzingView from "../login/components/AnalyzingView";
 import QuizAuthView from "../login/components/QuizAuthView";
+import FullScreenVideo from "./FullScreenVideo";
 
 export default function QuizPage() {
     const router = useRouter();
@@ -159,6 +161,43 @@ export default function QuizPage() {
         (window as any).quizAnswers = answers;
     }, [answers]);
 
+    // --- Video Transition State ---
+    const [showVideo, setShowVideo] = useState(false);
+    const [videoSrc, setVideoSrc] = useState("");
+
+    // Videos are mapped video-1.mp4 to video-9.mp4
+    const getVideoForIndex = (index: number) => {
+        const videoNumber = (index % 9) + 1;
+        return `/videos/video-${videoNumber}.mp4`;
+    };
+
+    const handleNextWithVideo = () => {
+        // Show video transition every 3 questions (after 3rd, 6th, etc.)
+        // Questions are 0-indexed, so 2, 5, 8...
+        const shouldShowVideo = (currentStepIndex + 1) % 3 === 0;
+
+        if (shouldShowVideo) {
+            setVideoSrc(getVideoForIndex(currentStepIndex));
+            setShowVideo(true);
+        } else {
+            // Just move to next question if no video
+            if (currentStepIndex < questions.length - 1) {
+                setCurrentStepIndex(prev => prev + 1);
+            } else {
+                setView('analyzing');
+            }
+        }
+    };
+
+    const onVideoEnd = () => {
+        setShowVideo(false);
+        if (currentStepIndex < questions.length - 1) {
+            setCurrentStepIndex(prev => prev + 1);
+        } else {
+            setView('analyzing');
+        }
+    };
+
     // Render Content
     const renderContent = () => {
         if (loadingQuestions) {
@@ -170,6 +209,10 @@ export default function QuizPage() {
                     </div>
                 </div>
             );
+        }
+
+        if (showVideo) {
+            return <FullScreenVideo videoSrc={videoSrc} onEnd={onVideoEnd} />;
         }
 
         // Фильтруем вопросы по полу
@@ -188,6 +231,7 @@ export default function QuizPage() {
                         setCurrentStepIndex={setCurrentStepIndex}
                         answers={answers}
                         setAnswers={setAnswers}
+                        onNext={handleNextWithVideo}
                     />
                 );
 
@@ -236,6 +280,12 @@ export default function QuizPage() {
     const nextColorIndex = (currentQuestionIndex + 1) % gradientColors.length;
     const nextColor = gradientColors[nextColorIndex];
 
+    const containerRef = useRef(null);
+    const { scrollYProgress } = useScroll();
+
+    const y1 = useTransform(scrollYProgress, [0, 1], [0, -200]);
+    const y2 = useTransform(scrollYProgress, [0, 1], [0, 300]);
+
     // Устанавливаем CSS переменные для градиента
     useEffect(() => {
         const wrapper = document.querySelector(`.${styles.quizPageWrapper}`);
@@ -251,8 +301,18 @@ export default function QuizPage() {
     }, [currentQuestionIndex, currentColor, nextColor]);
 
     return (
-        <div className={`${styles.pageWrapper} ${view === 'quiz' ? styles.quizPageWrapper : ''}`}>
-            {renderContent()}
+        <div ref={containerRef} className={`${styles.pageWrapper} ${view === 'quiz' ? styles.quizPageWrapper : ''}`}>
+            {/* Premium Texture Overlay */}
+            <div className={styles.grain} />
+
+            {/* Background Parallax Blobs */}
+            <motion.div style={{ y: y1 }} className={`${styles.bgBlob} ${styles.blob1}`} />
+            <motion.div style={{ y: y2 }} className={`${styles.bgBlob} ${styles.blob2}`} />
+
+            <div style={{ position: 'relative', zIndex: 1, width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                {renderContent()}
+            </div>
         </div>
     );
 }
+

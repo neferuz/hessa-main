@@ -1,12 +1,33 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform, useInView } from "framer-motion";
 import Image from "next/image";
 import { ArrowRight, Shield, Zap, Microscope } from "lucide-react";
 import TickerBanner from "@/components/TickerBanner";
+import DoctorsBlock from "@/components/DoctorsBlock";
+import ReviewsBlock from "@/components/ReviewsBlock";
+import TelegramBanner from "@/components/TelegramBanner";
 import Footer from "@/components/Footer";
 import styles from "./About.module.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, ReactNode } from "react";
+
+// Premium RevealSection for sections appearance
+const RevealSection = ({ children }: { children: ReactNode }) => {
+    const ref = useRef(null);
+    const isInView = useInView(ref, { once: true, amount: 0.1 });
+
+    return (
+        <motion.div
+            ref={ref}
+            initial={{ opacity: 0, y: 30, scale: 0.98 }}
+            animate={isInView ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 30, scale: 0.98 }}
+            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+            className="w-full"
+        >
+            {children}
+        </motion.div>
+    );
+};
 
 const fadeUp = {
     hidden: { opacity: 0, y: 30 },
@@ -25,6 +46,11 @@ const iconMap: Record<string, React.ReactNode> = {
 
 export default function AboutPage() {
     const [data, setData] = useState<any>(null);
+    const containerRef = useRef(null);
+    const { scrollYProgress } = useScroll();
+
+    const y1 = useTransform(scrollYProgress, [0, 1], [0, -400]);
+    const y2 = useTransform(scrollYProgress, [0, 1], [0, 500]);
 
     useEffect(() => {
         fetch('http://localhost:8000/api/about')
@@ -33,7 +59,7 @@ export default function AboutPage() {
             .catch(console.error);
     }, []);
 
-    if (!data) return null; // Or a loading skeleton
+    if (!data) return null;
 
     const resolveImageUrl = (path: string) => {
         if (!path) return "";
@@ -45,111 +71,127 @@ export default function AboutPage() {
     };
 
     return (
-        <main className={styles.aboutContainer}>
+        <div ref={containerRef} className={styles.pageWrapper}>
+            {/* Premium Texture Overlay */}
+            <div className={styles.grain} />
 
-            {/* 1. HERO SECTION */}
-            <section className={styles.heroWrapper}>
-                <motion.div
-                    initial={{ y: -20, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    transition={{ duration: 0.8 }}
-                >
-                    <h1
-                        className={styles.bigHeading}
-                        dangerouslySetInnerHTML={{ __html: data.hero.heading || "OUR STORY. <br /> PURE HESSA" }}
-                    />
-                </motion.div>
+            {/* Background Parallax Blobs */}
+            <motion.div style={{ y: y1 }} className={`${styles.bgBlob} ${styles.blob1}`} />
+            <motion.div style={{ y: y2 }} className={`${styles.bgBlob} ${styles.blob2}`} />
 
-                <div className={styles.contentGrid}>
+            <main className={styles.aboutContainer}>
+
+                {/* 1. HERO SECTION */}
+                <section className={styles.heroWrapper}>
                     <motion.div
-                        className={styles.leftCol}
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.2 }}
-                    >
-                        <p className={styles.descText}>
-                            {data.hero.desc_left}
-                        </p>
-                        <button className={styles.blackPillBtn}>
-                            Каталог <div className={styles.arrowCircle}><ArrowRight size={14} /></div>
-                        </button>
-                    </motion.div>
-
-                    <motion.div
-                        className={styles.centerCol}
-                        initial={{ y: 40, opacity: 0 }}
+                        initial={{ y: -20, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
-                        transition={{ delay: 0.3 }}
+                        transition={{ duration: 0.8 }}
                     >
-                        <div className={styles.productContainer}>
-                            <Image
-                                src={resolveImageUrl(data.hero.image)}
-                                alt="Hessa About"
-                                fill
-                                className={styles.productImg}
-                            />
-                        </div>
+                        <h1
+                            className={styles.bigHeading}
+                            dangerouslySetInnerHTML={{ __html: data.hero.heading || "OUR STORY. <br /> PURE HESSA" }}
+                        />
                     </motion.div>
 
-                    <motion.div
-                        className={styles.rightCol}
-                        initial={{ opacity: 0, x: 20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.4 }}
-                    >
-                        <p className={styles.descText}>
-                            {data.hero.desc_right}
-                        </p>
-                    </motion.div>
-                </div>
-            </section>
+                    <div className={styles.contentGrid}>
+                        <motion.div
+                            className={styles.leftCol}
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.2 }}
+                        >
+                            <p className={styles.descText}>
+                                {data.hero.desc_left}
+                            </p>
+                            <button className={styles.blackPillBtn}>
+                                Каталог <div className={styles.arrowCircle}><ArrowRight size={14} /></div>
+                            </button>
+                        </motion.div>
 
-            {/* 2. TICKER BANNER (Dynamic internally) */}
-            <TickerBanner />
+                        <motion.div
+                            className={styles.centerCol}
+                            initial={{ y: 40, opacity: 0 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            transition={{ delay: 0.3 }}
+                        >
+                            <div className={styles.productContainer}>
+                                <Image
+                                    src={resolveImageUrl(data.hero.image)}
+                                    alt="Hessa About"
+                                    fill
+                                    className={styles.productImg}
+                                />
+                            </div>
+                        </motion.div>
 
-            {/* 3. BENEFITS (METRICS) SECTION */}
-            <section className={styles.benefitsSection}>
-                <motion.div
-                    className={styles.benefitsContainer}
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{ once: true }}
-                    variants={stagger}
-                >
-                    {data.metrics && data.metrics.map((m: any) => (
-                        <MetricCard key={m.id} title={m.title} text={m.text} />
-                    ))}
-                </motion.div>
-            </section>
-
-            {/* 4. VALUES GRID */}
-            <section className={styles.valuesSection}>
-                <div className={styles.container}>
-                    <div className={styles.sectionHeader}>
-                        <h2 className={styles.sectionTitle}>Наши принципы</h2>
-                        <div style={{ opacity: 0.4, fontSize: '0.9rem', fontWeight: 600 }}>VALUES</div>
+                        <motion.div
+                            className={styles.rightCol}
+                            initial={{ opacity: 0, x: 20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.4 }}
+                        >
+                            <p className={styles.descText}>
+                                {data.hero.desc_right}
+                            </p>
+                        </motion.div>
                     </div>
+                </section>
 
+                {/* 2. TICKER BANNER */}
+                <TickerBanner />
+
+                {/* 3. BENEFITS SECTION */}
+                <section className={styles.benefitsSection}>
                     <motion.div
-                        className={styles.valuesGrid}
+                        className={styles.benefitsContainer}
                         initial="hidden"
                         whileInView="visible"
                         viewport={{ once: true }}
                         variants={stagger}
                     >
-                        {data.values && data.values.map((v: any) => (
-                            <ValueCard
-                                key={v.id}
-                                icon={iconMap[v.icon] || <Shield size={28} strokeWidth={1.5} />}
-                                title={v.title}
-                                desc={v.desc}
-                            />
+                        {data.metrics && data.metrics.map((m: any) => (
+                            <MetricCard key={m.id} title={m.title} text={m.text} />
                         ))}
                     </motion.div>
-                </div>
-            </section>
-            <Footer />
-        </main>
+                </section>
+
+                {/* 4. VALUES GRID */}
+                <section className={styles.valuesSection}>
+                    <div className={styles.container}>
+                        <div className={styles.sectionHeader}>
+                            <h2 className={styles.sectionTitle}>Наши принципы</h2>
+                            <div style={{ opacity: 0.4, fontSize: '0.9rem', fontWeight: 600 }}>VALUES</div>
+                        </div>
+
+                        <RevealSection>
+                            <motion.div
+                                className={styles.valuesGrid}
+                                initial="hidden"
+                                whileInView="visible"
+                                viewport={{ once: true }}
+                                variants={stagger}
+                            >
+                                {data.values && data.values.map((v: any) => (
+                                    <ValueCard
+                                        key={v.id}
+                                        icon={iconMap[v.icon] || <Shield size={28} strokeWidth={1.5} />}
+                                        title={v.title}
+                                        desc={v.desc}
+                                    />
+                                ))}
+                            </motion.div>
+                        </RevealSection>
+                    </div>
+                </section>
+
+                <RevealSection><DoctorsBlock /></RevealSection>
+                <RevealSection><ReviewsBlock /></RevealSection>
+                <RevealSection><TelegramBanner /></RevealSection>
+
+                <Footer />
+            </main>
+        </div>
     );
 }
 
@@ -171,3 +213,4 @@ function ValueCard({ icon, title, desc }: { icon: React.ReactNode, title: string
         </motion.div>
     );
 }
+

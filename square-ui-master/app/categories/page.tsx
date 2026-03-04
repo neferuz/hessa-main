@@ -38,7 +38,7 @@ export default function CategoriesPage() {
     const [isUploading, setIsUploading] = useState(false);
 
     // Dialog State
-    const [newCat, setNewCat] = useState({ name: "", description_short: "", description: "", image: "" });
+    const [newCat, setNewCat] = useState({ name: "", description_short: "", description: "" });
     const [isOpen, setIsOpen] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
     const [editId, setEditId] = useState<number | null>(null);
@@ -69,7 +69,7 @@ export default function CategoriesPage() {
     }, []);
 
     const resetForm = () => {
-        setNewCat({ name: "", description_short: "", description: "", image: "" });
+        setNewCat({ name: "", description_short: "", description: "" });
         setIsEditing(false);
         setEditId(null);
     };
@@ -85,8 +85,7 @@ export default function CategoriesPage() {
         setNewCat({
             name: cat.name,
             description_short: cat.description_short || "",
-            description: cat.description || "",
-            image: cat.image || ""
+            description: cat.description || ""
         });
         setIsEditing(true);
         setEditId(cat.id);
@@ -230,67 +229,19 @@ export default function CategoriesPage() {
                                             </DialogDescription>
                                         </DialogHeader>
                                         <div className="px-6 space-y-4 overflow-y-auto flex-1 min-h-0">
-                                            <div className="space-y-2">
-                                                <Label htmlFor="name" className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
-                                                    Название <span className="text-red-500">*</span>
-                                                </Label>
-                                                <Input
-                                                    id="name"
-                                                    value={newCat.name}
-                                                    onChange={(e) => setNewCat({ ...newCat, name: e.target.value })}
-                                                    placeholder="Например: Витамины"
-                                                    className="h-9"
-                                                />
-                                            </div>
-
-                                            <div className="space-y-2">
-                                                <Label className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Изображение</Label>
-                                                <div className="flex gap-2">
-                                                    <div className="relative flex-1">
-                                                        <ImageIcon className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
-                                                        <Input
-                                                            value={newCat.image}
-                                                            onChange={(e) => setNewCat({ ...newCat, image: e.target.value })}
-                                                            placeholder="URL изображения..."
-                                                            className="h-9 pl-9"
-                                                        />
-                                                    </div>
-                                                    <input
-                                                        type="file"
-                                                        ref={fileInputRef}
-                                                        className="hidden"
-                                                        accept="image/*"
-                                                        onChange={handleFileUpload}
+                                            <div className="space-y-4">
+                                                <div className="space-y-2">
+                                                    <Label htmlFor="name" className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
+                                                        Название <span className="text-red-500">*</span>
+                                                    </Label>
+                                                    <Input
+                                                        id="name"
+                                                        value={newCat.name}
+                                                        onChange={(e) => setNewCat({ ...newCat, name: e.target.value })}
+                                                        placeholder="Например: Витамины"
+                                                        className="h-10 text-base font-medium rounded-xl border-border/50 focus:border-primary/50 transition-all"
                                                     />
-                                                    <Button
-                                                        variant="outline"
-                                                        size="sm"
-                                                        className="h-9 gap-2"
-                                                        onClick={() => fileInputRef.current?.click()}
-                                                        disabled={isUploading}
-                                                    >
-                                                        {isUploading ? <Loader2 className="size-4 animate-spin" /> : <Upload className="size-4" />}
-                                                        Загрузить
-                                                    </Button>
                                                 </div>
-
-                                                {newCat.image && (
-                                                    <motion.div
-                                                        initial={{ opacity: 0, height: 0 }}
-                                                        animate={{ opacity: 1, height: "auto" }}
-                                                        className="relative aspect-video rounded-lg overflow-hidden border border-border bg-muted"
-                                                    >
-                                                        <img src={getImageUrl(newCat.image)} alt="Preview" className="w-full h-full object-cover" />
-                                                        <Button
-                                                            variant="destructive"
-                                                            size="icon"
-                                                            className="absolute top-2 right-2 h-8 w-8 rounded-full"
-                                                            onClick={() => setNewCat({ ...newCat, image: "" })}
-                                                        >
-                                                            <Trash2 className="size-4" />
-                                                        </Button>
-                                                    </motion.div>
-                                                )}
                                             </div>
 
                                             <div className="space-y-2">
@@ -368,7 +319,7 @@ export default function CategoriesPage() {
                                 </p>
                             </motion.div>
                         ) : (
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 pb-20">
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6 pb-20">
                                 <AnimatePresence>
                                     {categories.map((cat, i) => (
                                         <motion.div
@@ -376,76 +327,71 @@ export default function CategoriesPage() {
                                             initial={{ opacity: 0, y: 20 }}
                                             animate={{ opacity: 1, y: 0 }}
                                             transition={{ delay: i * 0.05 }}
-                                            className="group relative h-[340px] overflow-hidden rounded-[2.5rem] border bg-card transition-all duration-500 hover:-translate-y-2 hover:border-primary/50"
+                                            className="group relative min-h-[220px] flex flex-col overflow-hidden rounded-[2rem] border-2 border-border/40 bg-card/50 backdrop-blur-sm transition-all duration-500 hover:border-primary/40 hover:shadow-xl hover:shadow-primary/5 hover:-translate-y-1.5"
                                         >
-                                            {/* Full Background Image */}
-                                            <div className="absolute inset-0 z-0">
-                                                {cat.image ? (
-                                                    <img
-                                                        src={getImageUrl(cat.image)}
-                                                        alt={cat.name}
-                                                        className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
-                                                    />
-                                                ) : (
-                                                    <div className="w-full h-full bg-gradient-to-br from-slate-200 to-slate-100 dark:from-slate-800 dark:to-slate-900" />
-                                                )}
-                                                {/* Premium Overlays */}
-                                                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent transition-opacity duration-500" />
-                                                <div className="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                                            {/* Top Section with Icon & Actions */}
+                                            <div className="p-6 pb-0 flex justify-between items-start">
+                                                <div className="size-14 rounded-2xl bg-primary/10 flex items-center justify-center text-primary transition-all duration-500 group-hover:bg-primary group-hover:text-white group-hover:scale-110 shadow-lg shadow-primary/10">
+                                                    <Layers className="size-7" />
+                                                </div>
+                                                <DropdownMenu>
+                                                    <DropdownMenuTrigger asChild>
+                                                        <Button variant="ghost" size="icon" className="h-10 w-10 rounded-full hover:bg-muted transition-all active:scale-90">
+                                                            <MoreHorizontal className="size-5 text-muted-foreground" />
+                                                        </Button>
+                                                    </DropdownMenuTrigger>
+                                                    <DropdownMenuContent align="end" className="w-52 p-2 rounded-2xl shadow-2xl border-none bg-popover/95 backdrop-blur-md">
+                                                        <DropdownMenuLabel className="px-3 py-2 text-[10px] font-black uppercase tracking-widest text-muted-foreground/50">Действия</DropdownMenuLabel>
+                                                        <DropdownMenuSeparator className="bg-muted-foreground/10" />
+                                                        <DropdownMenuItem
+                                                            onClick={() => handleEdit(cat)}
+                                                            className="rounded-xl px-3 py-2.5 focus:bg-primary focus:text-primary-foreground transition-all cursor-pointer flex items-center gap-3 group"
+                                                        >
+                                                            <Pencil className="size-4 text-muted-foreground group-focus:text-primary-foreground transition-colors" />
+                                                            <span className="font-semibold text-sm">Редактировать</span>
+                                                        </DropdownMenuItem>
+                                                        <DropdownMenuSeparator className="bg-muted-foreground/10" />
+                                                        <DropdownMenuItem
+                                                            onClick={() => confirmDelete(cat)}
+                                                            className="text-destructive focus:text-white focus:bg-destructive rounded-xl px-3 py-2.5 transition-all cursor-pointer flex items-center gap-3 group"
+                                                        >
+                                                            <Trash2 className="size-4 text-destructive group-focus:text-white transition-colors" />
+                                                            <span className="font-semibold text-sm">Удалить</span>
+                                                        </DropdownMenuItem>
+                                                    </DropdownMenuContent>
+                                                </DropdownMenu>
                                             </div>
 
-                                            {/* Content Overlay */}
-                                            <div className="relative z-10 h-full flex flex-col justify-between p-8 text-white">
-
-                                                {/* Top Actions */}
-                                                <div className="flex justify-between items-start">
-                                                    <div className="bg-white/10 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-bold tracking-widest border border-white/20 uppercase">
-                                                        #{cat.id}
+                                            {/* Bottom Info */}
+                                            <div className="p-6 flex flex-col flex-1">
+                                                <div className="mb-4">
+                                                    <h3 className="font-black text-[22px] tracking-tight text-foreground leading-[1.1] mb-2 group-hover:text-primary transition-colors">
+                                                        {cat.name}
+                                                    </h3>
+                                                    <div className="flex items-center gap-2">
+                                                        <div className="px-2.5 py-1 rounded-full bg-muted/50 border border-border/50 text-[10px] font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-1.5">
+                                                            <Package className="size-3" />
+                                                            {cat.products_count || 0} товаров
+                                                        </div>
+                                                        <div className="px-2.5 py-1 rounded-full bg-muted/50 border border-border/50 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+                                                            ID: #{cat.id}
+                                                        </div>
                                                     </div>
-                                                    <DropdownMenu>
-                                                        <DropdownMenuTrigger asChild>
-                                                            <Button variant="ghost" size="icon" className="h-10 w-10 rounded-full text-white hover:bg-white/20 border border-white/10 backdrop-blur-sm transition-all active:scale-90">
-                                                                <MoreHorizontal className="size-6" />
-                                                            </Button>
-                                                        </DropdownMenuTrigger>
-                                                        <DropdownMenuContent align="end" className="w-52 p-1.5 rounded-2xl shadow-2xl border-none bg-popover/95 backdrop-blur-md">
-                                                            <DropdownMenuLabel className="px-3 py-2 text-[10px] font-black uppercase tracking-widest text-muted-foreground/50">Действия</DropdownMenuLabel>
-                                                            <DropdownMenuSeparator className="bg-muted-foreground/10" />
-                                                            <DropdownMenuItem
-                                                                onClick={() => handleEdit(cat)}
-                                                                className="rounded-xl px-3 py-2.5 focus:bg-primary focus:text-primary-foreground transition-all cursor-pointer flex items-center gap-3 group"
-                                                            >
-                                                                <Pencil className="size-4 text-muted-foreground group-focus:text-primary-foreground transition-colors" />
-                                                                <span className="font-semibold text-sm">Редактировать</span>
-                                                            </DropdownMenuItem>
-                                                            <DropdownMenuSeparator className="bg-muted-foreground/10" />
-                                                            <DropdownMenuItem
-                                                                onClick={() => confirmDelete(cat)}
-                                                                className="text-destructive focus:text-white focus:bg-destructive rounded-xl px-3 py-2.5 transition-all cursor-pointer flex items-center gap-3 group"
-                                                            >
-                                                                <Trash2 className="size-4 text-destructive group-focus:text-white transition-colors" />
-                                                                <span className="font-semibold text-sm">Удалить</span>
-                                                            </DropdownMenuItem>
-                                                        </DropdownMenuContent>
-                                                    </DropdownMenu>
                                                 </div>
 
-                                                {/* Bottom Info */}
-                                                <div className="space-y-3">
-                                                    <div className="flex items-center gap-2 text-white/70 text-[10px] font-bold uppercase tracking-widest bg-white/5 backdrop-blur-sm self-start px-3 py-1.5 rounded-full border border-white/5 w-fit">
-                                                        <Package className="size-3" />
-                                                        <span>{cat.products_count || 0} товаров</span>
-                                                    </div>
+                                                {cat.description_short && (
+                                                    <p className="text-sm font-medium text-muted-foreground/80 leading-relaxed mb-4 line-clamp-2">
+                                                        {cat.description_short}
+                                                    </p>
+                                                )}
 
-                                                    <div>
-                                                        <h3 className="font-bold text-xl tracking-tight leading-[1.2] text-white group-hover:text-white group-hover:drop-shadow-[0_0_10px_rgba(255,255,255,0.3)] transition-all duration-300">
-                                                            {cat.name}
-                                                        </h3>
-                                                        <p className="text-xs text-white/60 mt-2 line-clamp-2 leading-relaxed h-0 opacity-0 group-hover:h-auto group-hover:opacity-100 transition-all duration-500 font-medium text-white/90">
-                                                            {cat.description_short || cat.description || "Нет описания"}
+                                                {cat.description && (
+                                                    <div className="mt-auto pt-4 border-t border-border/30">
+                                                        <p className="text-[11px] font-medium text-muted-foreground/60 line-clamp-3 italic">
+                                                            {cat.description}
                                                         </p>
                                                     </div>
-                                                </div>
+                                                )}
                                             </div>
                                         </motion.div>
                                     ))}

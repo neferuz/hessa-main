@@ -23,3 +23,8 @@ class AuthUserResponse(UserResponse):
 
     pass
 
+
+class TelegramAuthPayload(BaseModel):
+    initData: str
+    referral_code: str | None = None
+

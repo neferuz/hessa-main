@@ -47,30 +47,46 @@ export default function RootLayout({
       <body className={`${manrope.className} ${unbounded.variable} font-sans antialiased`}>
         <Script id="twa-init" strategy="afterInteractive">
           {`
-            if (window.Telegram && window.Telegram.WebApp) {
-              const twa = window.Telegram.WebApp;
-              twa.ready();
-              twa.expand();
+            if (typeof window !== 'undefined' && window.Telegram && window.Telegram.WebApp) {
+              const tg = window.Telegram.WebApp;
+              tg.ready();
+              tg.expand();
               
-              // Enable header color adjustment
-              twa.setHeaderColor('secondary_bg_color');
-              
-              // Disable vertical swipe to prevent accidental closing
-              if (twa.isVersionAtLeast('7.7')) {
-                twa.disableVerticalSwipe();
+              // New suggested settings from TZ
+              try {
+                if (tg.isVersionAtLeast('7.7')) {
+                  tg.disableVerticalSwipes();
+                }
+                tg.enableClosingConfirmation();
+              } catch (e) {
+                console.error('TWA: Error setting advanced features', e);
               }
+
+              // Color configuration
+              tg.setHeaderColor('#497a9b');
+              tg.setBackgroundColor('#497a9b');
               
+              const setAppHeight = () => {
+                document.documentElement.style.setProperty(
+                  '--app-height',
+                  \`\${tg.viewportStableHeight || window.innerHeight}px\`
+                );
+              }
+
+              setAppHeight();
+              tg.onEvent('viewportChanged', setAppHeight);
+
               // Handle BackButton visibility
               const handlePathChange = () => {
                 const isHome = window.location.pathname === '/';
                 if (isHome) {
-                  twa.BackButton.hide();
+                  tg.BackButton.hide();
                 } else {
-                  twa.BackButton.show();
+                  tg.BackButton.show();
                 }
               };
               
-              twa.BackButton.onClick(() => window.history.back());
+              tg.BackButton.onClick(() => window.history.back());
               
               // Initial check
               handlePathChange();
@@ -84,7 +100,7 @@ export default function RootLayout({
                 }
               }, 500);
               
-              console.log('TWA Initialized:', twa.version);
+              console.log('TWA Initialized:', tg.version);
             }
           `}
         </Script>

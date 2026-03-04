@@ -32,13 +32,35 @@ function ProfileContent() {
     const { openSupport } = useSupportSheet();
     const { openAbout } = useAboutSheet();
     const { openAnalysis } = useAnalysisSheet();
-    const [user] = useState({
-        name: "Александр Иванов",
-        phone: "+998 90 123 45 67",
+    const [user, setUser] = useState({
+        name: "Пользователь",
+        phone: "",
+        photo: "",
         plan: "Hessa Premium", // Can be null or string
         daysLeft: 24,
         purchaseDate: "10.01.2024"
     });
+
+    useEffect(() => {
+        try {
+            const tg = (window as any).Telegram?.WebApp;
+            if (tg && tg.initDataUnsafe?.user) {
+                const tgUser = tg.initDataUnsafe.user;
+                const firstName = tgUser.first_name || "";
+                const lastName = tgUser.last_name || "";
+                const fullName = `${firstName} ${lastName}`.trim() || "Пользователь";
+                const photoUrl = tgUser.photo_url || "";
+
+                setUser(prev => ({
+                    ...prev,
+                    name: fullName,
+                    photo: photoUrl,
+                }));
+            }
+        } catch (e) {
+            console.log("Not in Telegram WebApp context");
+        }
+    }, []);
 
     useEffect(() => {
         const open = searchParams.get("open");
@@ -88,10 +110,14 @@ function ProfileContent() {
                 {/* User Info */}
                 <div className="flex flex-col items-center pt-6 mb-8">
                     <div className="w-20 h-20 rounded-full bg-gray-50 border border-gray-200 flex items-center justify-center relative overflow-hidden mb-3">
-                        <User size={36} className="text-gray-300" />
+                        {user.photo ? (
+                            <img src={user.photo} alt={user.name} className="w-full h-full object-cover" />
+                        ) : (
+                            <User size={36} className="text-gray-300" />
+                        )}
                     </div>
                     <h2 className="text-[20px] font-black text-gray-900 mb-0.5 tracking-tight">{user.name}</h2>
-                    <p className="text-[13px] text-gray-400 font-bold">{user.phone}</p>
+                    {user.phone && <p className="text-[13px] text-gray-400 font-bold">{user.phone}</p>}
                 </div>
 
                 {/* Plan Card */}

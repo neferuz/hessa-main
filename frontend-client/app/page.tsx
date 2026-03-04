@@ -101,7 +101,7 @@ export default function Home() {
         <motion.div style={{ opacity: 0.4 }} className={`${styles.bgBlob} ${styles.blob5}`} />
 
         {/* DECORATIVE FLOATING CAPSULES */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden z-0" style={{ height: '300%' }}>
+        <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
           <FloatingCapsule className={styles.capsuleBlue} delay={0} />
           <FloatingCapsule className={styles.capsuleRed} delay={2} />
           <FloatingCapsule className={styles.capsuleYellow} delay={5} />

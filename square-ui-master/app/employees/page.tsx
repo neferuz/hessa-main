@@ -106,7 +106,7 @@ export default function EmployeesPage() {
 
     const fetchEmployees = async () => {
         try {
-            const res = await fetch("http://localhost:8000/api/employees/");
+            const res = await fetch("http://127.0.0.1:8000/api/employees/");
             if (res.ok) {
                 const data = await res.json();
                 setEmployees(data);
@@ -120,7 +120,7 @@ export default function EmployeesPage() {
 
     const handleCreate = async () => {
         try {
-            const res = await fetch("http://localhost:8000/api/employees/", {
+            const res = await fetch("http://127.0.0.1:8000/api/employees/", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(newEmployee),

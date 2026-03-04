@@ -65,7 +65,7 @@ export default function PlansPage() {
 
     const fetchPlans = async () => {
         try {
-            const res = await fetch('http://localhost:8000/api/plans');
+            const res = await fetch('http://127.0.0.1:8000/api/plans');
             if (res.ok) {
                 const data = await res.json();
                 setPlans(data);
@@ -83,8 +83,8 @@ export default function PlansPage() {
 
         try {
             const url = isEditing && editingPlan?.id
-                ? `http://localhost:8000/api/plans/${editingPlan.id}`
-                : 'http://localhost:8000/api/plans';
+                ? `http://127.0.0.1:8000/api/plans/${editingPlan.id}`
+                : 'http://127.0.0.1:8000/api/plans';
 
             const method = isEditing ? 'PUT' : 'POST';
 
@@ -111,7 +111,7 @@ export default function PlansPage() {
         if (!planToDelete) return;
 
         try {
-            const res = await fetch(`http://localhost:8000/api/plans/${planToDelete}`, {
+            const res = await fetch(`http://127.0.0.1:8000/api/plans/${planToDelete}`, {
                 method: 'DELETE'
             });
 
@@ -131,7 +131,7 @@ export default function PlansPage() {
 
     const toggleActive = async (plan: Plan) => {
         try {
-            const res = await fetch(`http://localhost:8000/api/plans/${plan.id}`, {
+            const res = await fetch(`http://127.0.0.1:8000/api/plans/${plan.id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ ...plan, is_active: !plan.is_active })

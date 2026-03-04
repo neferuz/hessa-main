@@ -101,7 +101,7 @@ export default function EmployeeDetailsPage() {
 
     const fetchEmployee = async (id: string) => {
         try {
-            const res = await fetch(`http://localhost:8000/api/employees/${id}`);
+            const res = await fetch(`http://127.0.0.1:8000/api/employees/${id}`);
             if (res.ok) {
                 const data = await res.json();
                 setEmployee(data);
@@ -135,7 +135,7 @@ export default function EmployeeDetailsPage() {
         if (!employee) return;
         setSavingData(true);
         try {
-            const res = await fetch(`http://localhost:8000/api/employees/${employee.id}`, {
+            const res = await fetch(`http://127.0.0.1:8000/api/employees/${employee.id}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -164,7 +164,7 @@ export default function EmployeeDetailsPage() {
         if (!employee || salaryAmount <= 0) return;
 
         try {
-            const res = await fetch(`http://localhost:8000/api/employees/${employee.id}/pay`, {
+            const res = await fetch(`http://127.0.0.1:8000/api/employees/${employee.id}/pay`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({

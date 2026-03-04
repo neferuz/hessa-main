@@ -162,7 +162,7 @@ export default function ChatWidget() {
             }));
             chatHistory.push({ role: "user", content: userMsgText });
 
-            const res = await fetch("http://localhost:8000/api/chat/messages", {
+            const res = await fetch("http://127.0.0.1:8000/api/chat/messages", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ messages: chatHistory })

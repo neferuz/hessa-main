@@ -12,7 +12,7 @@ export default function Footer() {
     useEffect(() => {
         const fetchFooter = async () => {
             try {
-                const res = await fetch(`http://localhost:8000/api/content?t=${Date.now()}`, {
+                const res = await fetch(`http://127.0.0.1:8000/api/content?t=${Date.now()}`, {
                     cache: 'no-store'
                 });
                 const data = await res.json();

@@ -305,13 +305,13 @@
                 "label": "\u0414\u043e\u043a\u0443\u043c\u0435\u043d\u0442 1",
                 "label_uz": "Maxfiylik siyosati",
                 "label_en": "Privacy Policy",
-                "url": "http://localhost:8000/static/uploads/33d0436c-c309-403e-a421-b9c719a01342.png"
+                "url": "http://127.0.0.1:8000/static/uploads/33d0436c-c309-403e-a421-b9c719a01342.png"
             },
             {
                 "label": "\u0441\u0435\u0440\u0442\u0438\u0444\u0438\u043a\u0430\u0442 2",
                 "label_uz": "Foydalanish shartlari",
                 "label_en": "Terms of use",
-                "url": "http://localhost:8000/static/uploads/e4d9a2ad-9efb-4dfa-846c-7cd1b09e6b87.jpeg"
+                "url": "http://127.0.0.1:8000/static/uploads/e4d9a2ad-9efb-4dfa-846c-7cd1b09e6b87.jpeg"
             }
         ]
     },

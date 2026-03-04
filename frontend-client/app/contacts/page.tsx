@@ -132,7 +132,7 @@ export default function ContactsPage() {
 
     const fetchContactsInfo = async () => {
         try {
-            const res = await fetch(`http://localhost:8000/api/content?t=${Date.now()}`);
+            const res = await fetch(`http://127.0.0.1:8000/api/content?t=${Date.now()}`);
             const data = await res.json();
             if (data.contacts_info) {
                 setContactsInfo(data.contacts_info);

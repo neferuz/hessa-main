@@ -19,7 +19,7 @@ export default function DifferenceDetailsClient() {
     useEffect(() => {
         const fetchContent = async () => {
             try {
-                const res = await fetch('http://localhost:8000/api/content');
+                const res = await fetch('http://127.0.0.1:8000/api/content');
                 const data = await res.json();
                 if (data.difference) {
                     const found = data.difference.find((d: any) => d.id === id);

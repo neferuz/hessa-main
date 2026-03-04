@@ -18,7 +18,7 @@ export default function Hero() {
     useEffect(() => {
         const fetchSlides = async () => {
             try {
-                const res = await fetch('http://localhost:8000/api/hero', { cache: 'no-store' });
+                const res = await fetch('http://127.0.0.1:8000/api/hero', { cache: 'no-store' });
                 const data = await res.json();
                 console.log("Hero Data Fetched:", data); // Debug log
                 if (data.slides && data.slides.length > 0) {

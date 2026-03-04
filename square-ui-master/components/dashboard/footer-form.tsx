@@ -44,7 +44,7 @@ export function FooterForm({ lang }: FooterFormProps) {
     const fetchFooterData = async () => {
         setLoading(true);
         try {
-            const res = await fetch('http://localhost:8000/api/content');
+            const res = await fetch('http://127.0.0.1:8000/api/content');
             if (res.ok) {
                 const data = await res.json();
                 if (data.footer) {
@@ -63,10 +63,10 @@ export function FooterForm({ lang }: FooterFormProps) {
         setSaving(true);
         try {
             // First get full content to preserve other fields
-            const resGet = await fetch('http://localhost:8000/api/content');
+            const resGet = await fetch('http://127.0.0.1:8000/api/content');
             const currentContent = await resGet.json();
 
-            const res = await fetch('http://localhost:8000/api/content', {
+            const res = await fetch('http://127.0.0.1:8000/api/content', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ ...currentContent, footer }),
@@ -125,7 +125,7 @@ export function FooterForm({ lang }: FooterFormProps) {
         formData.append('file', file);
 
         try {
-            const res = await fetch('http://localhost:8000/api/upload', {
+            const res = await fetch('http://127.0.0.1:8000/api/upload', {
                 method: 'POST',
                 body: formData,
             });

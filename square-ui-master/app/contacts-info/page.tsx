@@ -31,7 +31,7 @@ export default function ContactsInfoAdminPage() {
 
     const fetchContactsInfo = async () => {
         try {
-            const res = await fetch(`http://localhost:8000/api/content?t=${Date.now()}`);
+            const res = await fetch(`http://127.0.0.1:8000/api/content?t=${Date.now()}`);
             if (!res.ok) throw new Error("Failed to fetch");
             const data = await res.json();
             if (data.contacts_info) {
@@ -49,7 +49,7 @@ export default function ContactsInfoAdminPage() {
         setSaving(true);
         try {
             // 1. Get current data to merge
-            const currentRes = await fetch(`http://localhost:8000/api/content?t=${Date.now()}`);
+            const currentRes = await fetch(`http://127.0.0.1:8000/api/content?t=${Date.now()}`);
             if (!currentRes.ok) throw new Error("Failed to fetch current data");
             const currentData = await currentRes.json();
 
@@ -67,7 +67,7 @@ export default function ContactsInfoAdminPage() {
             };
 
             // 3. Send POST request
-            const res = await fetch("http://localhost:8000/api/content", {
+            const res = await fetch("http://127.0.0.1:8000/api/content", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(payload)

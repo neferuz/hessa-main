@@ -15,7 +15,7 @@ export default function DifferenceCarousel() {
     const x = useMotionValue(0);
     const [lang, setLang] = useState("RU");
 
-    const API_BASE_URL = "http://localhost:8000";
+    const API_BASE_URL = "http://127.0.0.1:8000";
 
     const getImageUrl = (img: any) => {
         let url = img;

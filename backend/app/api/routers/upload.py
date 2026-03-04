@@ -22,8 +22,8 @@ async def upload_file(file: UploadFile = File(...)):
         with open(file_path, "wb") as buffer:
             shutil.copyfileobj(file.file, buffer)
             
-        # Return URL (assuming server is localhost:8000)
+        # Return URL (assuming server is 127.0.0.1:8000)
         # Note: You need to mount 'static' in main.py
-        return {"url": f"http://localhost:8000/static/uploads/{unique_filename}"}
+        return {"url": f"http://127.0.0.1:8000/static/uploads/{unique_filename}"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

@@ -329,9 +329,9 @@ export default function ProfilePage() {
     const getFileUrl = (url: string | null) => {
         if (!url) return '';
         if (url.startsWith('http')) return url;
-        if (url.startsWith('/static')) return `http://localhost:8000${url}`;
+        if (url.startsWith('/static')) return `http://127.0.0.1:8000${url}`;
         const clean = url.startsWith('/') ? url.slice(1) : url;
-        return `http://localhost:8000/static/${clean}`;
+        return `http://127.0.0.1:8000/static/${clean}`;
     };
 
     // Listen for language changes
@@ -371,12 +371,12 @@ export default function ProfilePage() {
 
         // If it already starts with /static, just prepend host
         if (url.startsWith("/static")) {
-            return `http://localhost:8000${url}`;
+            return `http://127.0.0.1:8000${url}`;
         }
 
         // Otherwise assume it's a file in backend/static and needs /static prefix
         const cleanPath = url.startsWith("/") ? url.slice(1) : url;
-        return `http://localhost:8000/static/${cleanPath}`;
+        return `http://127.0.0.1:8000/static/${cleanPath}`;
     };
 
     // Lock scroll when modal is open
@@ -403,7 +403,7 @@ export default function ProfilePage() {
                 const parsed = JSON.parse(userData);
                 // Fetch detailed user data (including referral code and tokens)
                 try {
-                    const userRes = await fetch(`http://localhost:8000/api/users/${parsed.id}`);
+                    const userRes = await fetch(`http://127.0.0.1:8000/api/users/${parsed.id}`);
                     if (userRes.ok) {
                         const detailedUser = await userRes.json();
                         setUser(detailedUser);
@@ -448,7 +448,7 @@ export default function ProfilePage() {
 
                 // Загружаем историю заказов с бэкенда
                 try {
-                    const ordersRes = await fetch(`http://localhost:8000/api/orders/user/${parsed.id}`);
+                    const ordersRes = await fetch(`http://127.0.0.1:8000/api/orders/user/${parsed.id}`);
                     if (ordersRes.ok) {
                         const orders = await ordersRes.json();
 
@@ -475,7 +475,7 @@ export default function ProfilePage() {
 
                 // Загружаем запросы на анализы
                 try {
-                    const analysisRes = await fetch(`http://localhost:8000/api/analysis/user/${parsed.id}`);
+                    const analysisRes = await fetch(`http://127.0.0.1:8000/api/analysis/user/${parsed.id}`);
                     if (analysisRes.ok) {
                         const requests = await analysisRes.json();
                         setAnalysisRequests(requests);
@@ -534,7 +534,7 @@ export default function ProfilePage() {
                 updateData.address = editValues.address;
             }
 
-            const response = await fetch(`http://localhost:8000/api/users/${user.id}`, {
+            const response = await fetch(`http://127.0.0.1:8000/api/users/${user.id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -587,7 +587,7 @@ export default function ProfilePage() {
         if (!user?.id) return;
         setSaving(true);
         try {
-            const res = await fetch(`http://localhost:8000/api/analysis/`, {
+            const res = await fetch(`http://127.0.0.1:8000/api/analysis/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

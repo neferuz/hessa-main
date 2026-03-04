@@ -52,7 +52,7 @@ export default function CategoriesPage() {
 
     const fetchCategories = async () => {
         try {
-            const res = await fetch('http://localhost:8000/api/categories');
+            const res = await fetch('http://127.0.0.1:8000/api/categories');
             if (!res.ok) throw new Error("Failed to fetch");
             const data = await res.json();
             setCategories(data);
@@ -101,8 +101,8 @@ export default function CategoriesPage() {
         setIsSubmitting(true);
         try {
             const url = isEditing
-                ? `http://localhost:8000/api/categories/${editId}`
-                : 'http://localhost:8000/api/categories';
+                ? `http://127.0.0.1:8000/api/categories/${editId}`
+                : 'http://127.0.0.1:8000/api/categories';
 
             const method = isEditing ? 'PUT' : 'POST';
 
@@ -139,7 +139,7 @@ export default function CategoriesPage() {
 
         setIsDeleting(true);
         try {
-            const res = await fetch(`http://localhost:8000/api/categories/${catToDelete.id}`, {
+            const res = await fetch(`http://127.0.0.1:8000/api/categories/${catToDelete.id}`, {
                 method: 'DELETE'
             });
             if (res.ok) {
@@ -168,7 +168,7 @@ export default function CategoriesPage() {
         formData.append("file", file);
 
         try {
-            const res = await fetch("http://localhost:8000/api/upload", {
+            const res = await fetch("http://127.0.0.1:8000/api/upload", {
                 method: "POST",
                 body: formData,
             });

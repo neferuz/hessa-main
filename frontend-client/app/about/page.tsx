@@ -53,7 +53,7 @@ export default function AboutPage() {
     const y2 = useTransform(scrollYProgress, [0, 1], [0, 500]);
 
     useEffect(() => {
-        fetch('http://localhost:8000/api/about')
+        fetch('http://127.0.0.1:8000/api/about')
             .then(res => res.json())
             .then(setData)
             .catch(console.error);
@@ -64,7 +64,7 @@ export default function AboutPage() {
     const resolveImageUrl = (path: string) => {
         if (!path) return "";
         if (path.startsWith("http")) return path;
-        const backendBase = "http://localhost:8000";
+        const backendBase = "http://127.0.0.1:8000";
         if (path.startsWith("/static/uploads")) return `${backendBase}${path}`;
         if (path.startsWith("/") && !path.startsWith("/images")) return `${backendBase}/static/uploads${path}`;
         return path;

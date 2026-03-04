@@ -43,7 +43,7 @@ export function CompaniesForm({ lang }: CompaniesFormProps) {
     const fetchData = async () => {
         setLoading(true);
         try {
-            const res = await fetch('http://localhost:8000/api/content');
+            const res = await fetch('http://127.0.0.1:8000/api/content');
             if (res.ok) {
                 const data = await res.json();
                 if (data.companies) {
@@ -61,10 +61,10 @@ export function CompaniesForm({ lang }: CompaniesFormProps) {
     const handleSave = async () => {
         setSaving(true);
         try {
-            const resGet = await fetch('http://localhost:8000/api/content');
+            const resGet = await fetch('http://127.0.0.1:8000/api/content');
             const currentContent = await resGet.json();
 
-            const res = await fetch('http://localhost:8000/api/content', {
+            const res = await fetch('http://127.0.0.1:8000/api/content', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ ...currentContent, companies }),
@@ -102,7 +102,7 @@ export function CompaniesForm({ lang }: CompaniesFormProps) {
         const toastId = toast.loading("Загрузка изображения...");
 
         try {
-            const res = await fetch('http://localhost:8000/api/upload', {
+            const res = await fetch('http://127.0.0.1:8000/api/upload', {
                 method: 'POST',
                 body: formData,
             });

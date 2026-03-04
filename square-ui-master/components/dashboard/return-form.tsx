@@ -39,7 +39,7 @@ export function ReturnForm({ lang }: ReturnFormProps) {
     const fetchData = async () => {
         setLoading(true);
         try {
-            const res = await fetch('http://localhost:8000/api/content');
+            const res = await fetch('http://127.0.0.1:8000/api/content');
             if (res.ok) {
                 const data = await res.json();
                 if (data.return_page) setPageData(data.return_page);
@@ -100,7 +100,7 @@ export function ReturnForm({ lang }: ReturnFormProps) {
         formData.append('file', file);
 
         try {
-            const res = await fetch('http://localhost:8000/api/upload', {
+            const res = await fetch('http://127.0.0.1:8000/api/upload', {
                 method: 'POST',
                 body: formData,
             });
@@ -119,7 +119,7 @@ export function ReturnForm({ lang }: ReturnFormProps) {
         setSaving(true);
         try {
             // First get current content to avoid overwriting other sections
-            const currentRes = await fetch('http://localhost:8000/api/content');
+            const currentRes = await fetch('http://127.0.0.1:8000/api/content');
             const currentContent = await currentRes.json();
 
             const updatedContent = {
@@ -127,7 +127,7 @@ export function ReturnForm({ lang }: ReturnFormProps) {
                 return_page: pageData
             };
 
-            const res = await fetch('http://localhost:8000/api/content', {
+            const res = await fetch('http://127.0.0.1:8000/api/content', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(updatedContent),

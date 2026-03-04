@@ -110,7 +110,7 @@ function NewProductForm() {
         uploadFormData.append("file", file);
 
         try {
-            const res = await fetch("http://localhost:8000/api/upload", {
+            const res = await fetch("http://127.0.0.1:8000/api/upload", {
                 method: "POST",
                 body: uploadFormData,
             });
@@ -176,7 +176,7 @@ function NewProductForm() {
     useEffect(() => {
         const fetchCats = async () => {
             try {
-                const res = await fetch('http://localhost:8000/api/categories');
+                const res = await fetch('http://127.0.0.1:8000/api/categories');
                 if (res.ok) {
                     const data = await res.json();
                     setCategories(data);
@@ -195,7 +195,7 @@ function NewProductForm() {
             const fetchProduct = async () => {
                 setLoading(true);
                 try {
-                    const res = await fetch(`http://localhost:8000/api/products/${id}`);
+                    const res = await fetch(`http://127.0.0.1:8000/api/products/${id}`);
                     if (res.ok) {
                         const data = await res.json();
 
@@ -283,7 +283,7 @@ function NewProductForm() {
         uploadFormData.append("file", file);
 
         try {
-            const res = await fetch("http://localhost:8000/api/upload", {
+            const res = await fetch("http://127.0.0.1:8000/api/upload", {
                 method: "POST",
                 body: uploadFormData,
             });
@@ -352,7 +352,7 @@ function NewProductForm() {
                 images: formData.images.length > 0 ? formData.images : ["https://placehold.co/600x400/png?text=No+Image"]
             };
 
-            const url = isEditing ? `http://localhost:8000/api/products/${editId}` : 'http://localhost:8000/api/products';
+            const url = isEditing ? `http://127.0.0.1:8000/api/products/${editId}` : 'http://127.0.0.1:8000/api/products';
             const method = isEditing ? 'PUT' : 'POST';
 
             const res = await fetch(url, {

@@ -102,7 +102,7 @@ export default function UsersPage() {
 
     const fetchUsers = async () => {
         try {
-            const res = await fetch("http://localhost:8000/api/users/");
+            const res = await fetch("http://127.0.0.1:8000/api/users/");
             if (res.ok) {
                 const data = await res.json();
                 const formattedUsers = Array.isArray(data) ? data.map((user: any) => ({
@@ -137,7 +137,7 @@ export default function UsersPage() {
         const newStatus = user.status === "Suspended" ? true : false;
 
         try {
-            const res = await fetch(`http://localhost:8000/api/users/${user.id}`, {
+            const res = await fetch(`http://127.0.0.1:8000/api/users/${user.id}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ is_active: newStatus }),

@@ -82,7 +82,7 @@ export default function UserProfilePage() {
     useEffect(() => {
         const fetchUserData = async () => {
             try {
-                const response = await fetch(`http://localhost:8000/api/users/${userId}`, {
+                const response = await fetch(`http://127.0.0.1:8000/api/users/${userId}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -135,7 +135,7 @@ export default function UserProfilePage() {
             
             setOrdersLoading(true);
             try {
-                const response = await fetch(`http://localhost:8000/api/orders/user/${userId}`, {
+                const response = await fetch(`http://127.0.0.1:8000/api/orders/user/${userId}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',

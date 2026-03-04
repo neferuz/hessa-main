@@ -84,7 +84,7 @@ export default function QuizPage() {
     const fetchQuiz = async () => {
         setLoading(true);
         try {
-            const res = await fetch('http://localhost:8000/api/quiz');
+            const res = await fetch('http://127.0.0.1:8000/api/quiz');
             if (res.ok) {
                 const data = await res.json();
                 const sortedQuestions = (data.questions || [])
@@ -106,7 +106,7 @@ export default function QuizPage() {
 
                 if (needsFix && sortedQuestions.length > 0) {
                     try {
-                        await fetch('http://localhost:8000/api/quiz', {
+                        await fetch('http://127.0.0.1:8000/api/quiz', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({ questions: sortedQuestions }),
@@ -134,7 +134,7 @@ export default function QuizPage() {
                 order: idx
             }));
 
-            const res = await fetch('http://localhost:8000/api/quiz', {
+            const res = await fetch('http://127.0.0.1:8000/api/quiz', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ questions: updatedQuestions }),
@@ -172,7 +172,7 @@ export default function QuizPage() {
         setEditingQuestion(null);
 
         try {
-            const res = await fetch('http://localhost:8000/api/quiz', {
+            const res = await fetch('http://127.0.0.1:8000/api/quiz', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ questions: updatedQuestions }),
@@ -203,7 +203,7 @@ export default function QuizPage() {
             setQuestions(updatedQuestions);
 
             try {
-                const res = await fetch('http://localhost:8000/api/quiz', {
+                const res = await fetch('http://127.0.0.1:8000/api/quiz', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ questions: updatedQuestions }),
@@ -305,7 +305,7 @@ export default function QuizPage() {
                                         }, 100);
 
                                         try {
-                                            const res = await fetch('http://localhost:8000/api/quiz', {
+                                            const res = await fetch('http://127.0.0.1:8000/api/quiz', {
                                                 method: 'POST',
                                                 headers: { 'Content-Type': 'application/json' },
                                                 body: JSON.stringify({ questions: updatedQuestions }),
@@ -393,7 +393,7 @@ export default function QuizPage() {
                                     if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current);
                                     saveTimeoutRef.current = setTimeout(async () => {
                                         try {
-                                            const res = await fetch('http://localhost:8000/api/quiz', {
+                                            const res = await fetch('http://127.0.0.1:8000/api/quiz', {
                                                 method: 'POST',
                                                 headers: { 'Content-Type': 'application/json' },
                                                 body: JSON.stringify({ questions: reordered }),

@@ -164,7 +164,7 @@ export default function RecommendationsPage() {
     const getProductImage = (url?: string) => {
         if (!url) return "/product_bottle.png";
         if (url.startsWith("http")) return url;
-        return `http://localhost:8000${url.startsWith("/") ? "" : "/"}${url}`;
+        return `http://127.0.0.1:8000${url.startsWith("/") ? "" : "/"}${url}`;
     };
 
     // Загружаем результаты ИИ при монтировании
@@ -184,7 +184,7 @@ export default function RecommendationsPage() {
                     setCheckoutForm(prev => ({ ...prev, name: answers['name'] }));
                 }
 
-                const res = await fetch("http://localhost:8000/api/quiz/recommend", {
+                const res = await fetch("http://127.0.0.1:8000/api/quiz/recommend", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: savedAnswers // answers is already a valid JSON string or we stringify it
@@ -277,7 +277,7 @@ export default function RecommendationsPage() {
             ai_analysis: recommendation?.description
         };
 
-        fetch("http://localhost:8000/api/orders/", {
+        fetch("http://127.0.0.1:8000/api/orders/", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(orderPayload)

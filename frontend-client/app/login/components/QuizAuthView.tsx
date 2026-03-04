@@ -32,7 +32,7 @@ export default function QuizAuthView({
         setError(null);
         setIsSubmitting(true);
         try {
-            const res = await fetch("http://localhost:8000/api/auth/request-code", {
+            const res = await fetch("http://127.0.0.1:8000/api/auth/request-code", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email, context: "quiz" }),
@@ -57,7 +57,7 @@ export default function QuizAuthView({
         setIsSubmitting(true);
         const code = otp.join("");
         try {
-            const res = await fetch("http://localhost:8000/api/auth/verify-code", {
+            const res = await fetch("http://127.0.0.1:8000/api/auth/verify-code", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({

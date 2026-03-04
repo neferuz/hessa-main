@@ -81,8 +81,8 @@ export default function ProductsPage() {
         try {
             // setLoading(true); // Don't block UI on refresh if already loaded once
             const [productsRes, categoriesRes] = await Promise.all([
-                fetch('http://localhost:8000/api/products'),
-                fetch('http://localhost:8000/api/categories')
+                fetch('http://127.0.0.1:8000/api/products'),
+                fetch('http://127.0.0.1:8000/api/categories')
             ]);
 
             const productsData = await productsRes.json();
@@ -144,7 +144,7 @@ export default function ProductsPage() {
 
         try {
             setIsDeleting(true);
-            const res = await fetch(`http://localhost:8000/api/products/${productToDelete.id}`, {
+            const res = await fetch(`http://127.0.0.1:8000/api/products/${productToDelete.id}`, {
                 method: 'DELETE'
             });
 
@@ -167,7 +167,7 @@ export default function ProductsPage() {
     const handleToggleActive = async (product: Product, e: React.MouseEvent) => {
         e.stopPropagation();
         try {
-            const res = await fetch(`http://localhost:8000/api/products/${product.id}`, {
+            const res = await fetch(`http://127.0.0.1:8000/api/products/${product.id}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ is_active: !product.is_active })

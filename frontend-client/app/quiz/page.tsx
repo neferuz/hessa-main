@@ -76,7 +76,7 @@ export default function QuizPage() {
     useEffect(() => {
         const fetchQuestions = async () => {
             try {
-                const res = await fetch('http://localhost:8000/api/quiz', { cache: 'no-store' });
+                const res = await fetch('http://127.0.0.1:8000/api/quiz', { cache: 'no-store' });
                 if (res.ok) {
                     const data = await res.json();
                     if (data.questions && data.questions.length > 0) {

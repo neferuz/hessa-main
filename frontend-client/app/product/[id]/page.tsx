@@ -30,7 +30,7 @@ export default function ProductDetailPage() {
 
     useEffect(() => {
         if (!params?.id) return;
-        fetch(`http://localhost:8000/api/products/${params.id}`)
+        fetch(`http://127.0.0.1:8000/api/products/${params.id}`)
             .then(res => res.json())
             .then(data => setProduct(data))
             .catch(err => console.error(err))

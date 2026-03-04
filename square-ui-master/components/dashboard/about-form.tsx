@@ -41,7 +41,7 @@ export function AboutForm({ lang }: AboutFormProps) {
     const fetchData = async () => {
         setLoading(true);
         try {
-            const res = await fetch('http://localhost:8000/api/about');
+            const res = await fetch('http://127.0.0.1:8000/api/about');
             if (res.ok) {
                 const json = await res.json();
                 setData(json);
@@ -57,7 +57,7 @@ export function AboutForm({ lang }: AboutFormProps) {
     const handleSave = async () => {
         setSaving(true);
         try {
-            const res = await fetch('http://localhost:8000/api/about', {
+            const res = await fetch('http://127.0.0.1:8000/api/about', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data),
@@ -83,7 +83,7 @@ export function AboutForm({ lang }: AboutFormProps) {
         formData.append('file', file);
 
         try {
-            const res = await fetch('http://localhost:8000/api/upload', {
+            const res = await fetch('http://127.0.0.1:8000/api/upload', {
                 method: 'POST',
                 body: formData,
             });
@@ -124,7 +124,7 @@ export function AboutForm({ lang }: AboutFormProps) {
     const resolveImageUrl = (path: string) => {
         if (!path) return "";
         if (path.startsWith("http")) return path;
-        const backendBase = "http://localhost:8000";
+        const backendBase = "http://127.0.0.1:8000";
         if (path.startsWith("/static/uploads")) return `${backendBase}${path}`;
         if (path.startsWith("/") && !path.startsWith("/images")) return `${backendBase}/static/uploads${path}`;
         return path;

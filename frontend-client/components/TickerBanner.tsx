@@ -20,7 +20,7 @@ export default function TickerBanner() {
     useEffect(() => {
         const fetchContent = async () => {
             try {
-                const res = await fetch('http://localhost:8000/api/content');
+                const res = await fetch('http://127.0.0.1:8000/api/content');
                 const data = await res.json();
                 if (data.ticker) setItems(data.ticker);
             } catch (err) {

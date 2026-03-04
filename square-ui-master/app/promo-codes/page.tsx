@@ -60,7 +60,7 @@ export default function PromoCodesPage() {
 
     const fetchPromoCodes = async () => {
         try {
-            const res = await fetch('http://localhost:8000/api/promo-codes/');
+            const res = await fetch('http://127.0.0.1:8000/api/promo-codes/');
             if (res.ok) {
                 const data = await res.json();
                 setPromoCodes(data);
@@ -72,7 +72,7 @@ export default function PromoCodesPage() {
 
     const fetchProducts = async () => {
         try {
-            const res = await fetch('http://localhost:8000/api/products/');
+            const res = await fetch('http://127.0.0.1:8000/api/products/');
             if (res.ok) {
                 const data = await res.json();
                 setProducts(data);
@@ -90,8 +90,8 @@ export default function PromoCodesPage() {
 
         try {
             const url = isEditing && editingPromo?.id
-                ? `http://localhost:8000/api/promo-codes/${editingPromo.id}/`
-                : 'http://localhost:8000/api/promo-codes/';
+                ? `http://127.0.0.1:8000/api/promo-codes/${editingPromo.id}/`
+                : 'http://127.0.0.1:8000/api/promo-codes/';
 
             const method = isEditing ? 'PUT' : 'POST';
 
@@ -118,7 +118,7 @@ export default function PromoCodesPage() {
         if (!promoToDelete) return;
 
         try {
-            const res = await fetch(`http://localhost:8000/api/promo-codes/${promoToDelete}/`, {
+            const res = await fetch(`http://127.0.0.1:8000/api/promo-codes/${promoToDelete}/`, {
                 method: 'DELETE'
             });
 
@@ -162,7 +162,7 @@ export default function PromoCodesPage() {
 
     const toggleActive = async (promo: PromoCode) => {
         try {
-            const res = await fetch(`http://localhost:8000/api/promo-codes/${promo.id}/`, {
+            const res = await fetch(`http://127.0.0.1:8000/api/promo-codes/${promo.id}/`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ ...promo, is_active: !promo.is_active })

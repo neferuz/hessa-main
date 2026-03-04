@@ -15,7 +15,7 @@ export default function ReturnPage() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const res = await fetch(`http://localhost:8000/api/content?t=${Date.now()}`);
+                const res = await fetch(`http://127.0.0.1:8000/api/content?t=${Date.now()}`);
                 const data = await res.json();
                 if (data.return_page) setPageData(data.return_page);
             } catch (err) {

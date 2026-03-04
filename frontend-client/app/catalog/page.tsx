@@ -45,8 +45,8 @@ export default function CatalogPage() {
         const fetchData = async () => {
             try {
                 const [prodRes, catRes] = await Promise.all([
-                    fetch('http://localhost:8000/api/products'),
-                    fetch('http://localhost:8000/api/categories')
+                    fetch('http://127.0.0.1:8000/api/products'),
+                    fetch('http://127.0.0.1:8000/api/categories')
                 ]);
                 const prodData = await prodRes.json();
                 const catData = await catRes.json();
@@ -87,7 +87,7 @@ export default function CatalogPage() {
     const getImageUrl = (url: string | undefined) => {
         if (!url) return "/placeholder-product.png";
         if (url.startsWith("http")) return url;
-        if (url.startsWith("/static")) return `http://localhost:8000${url}`;
+        if (url.startsWith("/static")) return `http://127.0.0.1:8000${url}`;
         return url;
     };
 

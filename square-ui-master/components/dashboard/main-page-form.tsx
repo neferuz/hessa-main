@@ -56,8 +56,8 @@ export function MainPageForm({ lang }: MainPageFormProps) {
         setLoading(true);
         try {
             const [resHero, resContent] = await Promise.all([
-                fetch('http://localhost:8000/api/hero'),
-                fetch('http://localhost:8000/api/content')
+                fetch('http://127.0.0.1:8000/api/hero'),
+                fetch('http://127.0.0.1:8000/api/content')
             ]);
 
             if (resHero.ok) {
@@ -92,25 +92,25 @@ export function MainPageForm({ lang }: MainPageFormProps) {
         try {
             let res;
             if (activeSection === 'hero') {
-                res = await fetch('http://localhost:8000/api/hero', {
+                res = await fetch('http://127.0.0.1:8000/api/hero', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ slides }),
                 });
             } else if (activeSection === 'ticker') {
-                res = await fetch('http://localhost:8000/api/content', {
+                res = await fetch('http://127.0.0.1:8000/api/content', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ ticker }),
                 });
             } else if (activeSection === 'benefits') {
-                res = await fetch('http://localhost:8000/api/content', {
+                res = await fetch('http://127.0.0.1:8000/api/content', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ benefits }),
                 });
             } else if (activeSection === 'faq') {
-                res = await fetch('http://localhost:8000/api/content', {
+                res = await fetch('http://127.0.0.1:8000/api/content', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -140,7 +140,7 @@ export function MainPageForm({ lang }: MainPageFormProps) {
         formData.append('file', file);
 
         try {
-            const res = await fetch('http://localhost:8000/api/upload', {
+            const res = await fetch('http://127.0.0.1:8000/api/upload', {
                 method: 'POST',
                 body: formData,
             });
